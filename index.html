@@ -32,6 +32,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -90,6 +91,15 @@ button { cursor: pointer; }
   border-bottom: 2px solid transparent;
 }
 .topbar li a:hover { border-color: var(--marker); }
+.topbar ul { min-width: 0; }
+.topbar :focus-visible { outline-color: var(--marker); }
+.account { flex: none; display: flex; align-items: center; gap: 10px; margin-left: auto; font-size: .92rem; }
+.account[hidden] { display: none; }
+.account button {
+  padding: 3px 10px; background: none; color: #fff; white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, .55); border-radius: 2px;
+}
+.account button:hover { background: #fff; color: var(--ink); }
 
 /* 버튼 */
 .btn {
@@ -376,6 +386,37 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 
 footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; font-size: .92rem; }
 
+dialog {
+  width: min(100% - 32px, 460px); max-height: calc(100% - 48px); padding: 26px;
+  background: var(--paper); color: var(--ink); border: 0; border-top: 6px solid var(--mat);
+}
+dialog::backdrop { background: rgba(4, 28, 24, .62); }
+dialog.wide { width: min(100% - 32px, 620px); }
+.dialog-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 16px; }
+.dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+.link-btn { padding: 0; background: none; border: 0; color: var(--soft); text-decoration: underline; font-size: .92rem; }
+.link-btn:hover { color: var(--ink); }
+.form-msg { min-height: 1.6em; margin-top: 10px; font-size: .92rem; color: var(--red); }
+input[type="email"], input[type="password"] {
+  width: 100%; height: 44px; padding: 9px 11px; background: #fff; line-height: 1.4;
+  border: 1.5px solid #8FA39C; border-radius: 2px;
+}
+.note-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--gray-tint);
+}
+.note-row .meta { display: block; font-size: .86rem; color: var(--soft); }
+.note-row .acts { display: flex; gap: 10px; align-items: center; }
+.btn[disabled] { opacity: .55; cursor: wait; }
+.class-stats { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.class-stats h4 { margin: 0 0 4px; font: 600 1.02rem/1.5 var(--serif); }
+.class-stats p { color: var(--soft); font-size: .94rem; }
+.submit-box { margin-top: 24px; padding: 16px; background: var(--ground); }
+.submit-box .subhead { margin-top: 0; }
+.wiki-meta { margin: -6px 0 12px; font-size: .9rem; color: var(--soft); }
+.wiki-meta:empty { display: none; }
+.wiki-head .acts { display: flex; gap: 10px; align-items: center; }
+
 .toast {
   position: fixed; left: 50%; bottom: 24px; z-index: 40;
   transform: translate(-50%, 14px); opacity: 0; pointer-events: none;
@@ -403,6 +444,7 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
   .wrap { width: calc(100% - 32px); }
   .topbar .wrap { gap: 16px; }
   .topbar ul { gap: 16px; }
+  .account-name { display: none; }
   .lens-tabs { padding-left: 0; }
   .lens-tabs button { flex: 1; padding-inline: 2px; font-size: .84rem; }
   .versus, .field-row { grid-template-columns: 1fr; gap: 16px; }
@@ -445,6 +487,7 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
       <li><a href="#wiki">템플릿</a></li>
       <li><a href="#basis">근거</a></li>
     </ul>
+    <div class="account" id="account" hidden></div>
   </div>
 </nav>
 
@@ -540,10 +583,12 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
 <section class="mat" id="practice" aria-labelledby="practice-title">
   <div class="wrap">
     <h2 id="practice-title">글 한 편 분해하기</h2>
-    <p class="lead">글을 붙여 넣고 네 단계를 따라가면 비평문 뼈대가 만들어집니다. 입력한 내용은 이 브라우저에만 저장됩니다.</p>
+    <p class="lead">글을 붙여 넣고 네 단계를 따라가면 비평문 뼈대가 만들어집니다. <span id="practice-store">입력한 내용은 이 브라우저에만 저장됩니다.</span></p>
     <div class="wb-tools">
       <button class="btn small primary" type="button" data-load-sample>예시 글 불러오기</button>
       <button class="btn small ghost" type="button" id="wb-reset">새로 시작</button>
+      <button class="btn small ghost" type="button" id="cloud-save" hidden>클라우드에 저장</button>
+      <button class="btn small ghost" type="button" id="cloud-notes" hidden>내 노트</button>
       <span class="wb-saved" id="wb-saved" aria-live="polite"></span>
     </div>
     <div class="wb-layout">
@@ -606,7 +651,11 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
           <div class="bar-row post"><span>후</span><div class="bar-track"><div class="bar-fill" id="bar-post"></div></div><b id="bar-post-v">–</b></div>
         </div>
         <p class="calc-result" id="d-result" aria-live="polite">적용 전과 후의 값을 모두 입력하면 변화를 보여 줍니다.</p>
-        <div class="calc-actions"><button class="btn small line" type="button" id="m-import">실습 결과를 적용 후 칸에 넣기</button></div>
+        <div class="calc-actions"><button class="btn small line" type="button" id="m-import">실습 결과를 적용 후 칸에 넣기</button> <button class="btn small" type="button" id="m-save" hidden>측정 결과 저장</button></div>
+        <div class="class-stats" id="class-stats" hidden>
+          <h4>학급 평균</h4>
+          <p id="class-stats-text"></p>
+        </div>
       </div>
     </div>
   </div>
@@ -621,8 +670,12 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
       <div class="wiki-doc">
         <div class="wiki-head">
           <h3 id="wiki-doc-title"></h3>
-          <button class="btn small" type="button" id="wiki-copy">템플릿 복사</button>
+          <div class="acts">
+            <button class="link-btn" type="button" id="wiki-del" hidden>내 제출 삭제</button>
+            <button class="btn small" type="button" id="wiki-copy">템플릿 복사</button>
+          </div>
         </div>
+        <p class="wiki-meta" id="wiki-meta"></p>
         <pre id="wiki-doc-body" tabindex="0"></pre>
         <p class="wiki-contrib" id="wiki-contrib" hidden></p>
       </div>
@@ -670,20 +723,47 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
 
 <footer>
   <div class="wrap">
-    <p>CRAFT 프로토타입. 입력한 글과 노트는 서버로 전송되지 않고 이 브라우저에만 저장됩니다.</p>
+    <p id="foot-note">CRAFT 프로토타입. 입력한 글과 노트는 서버로 전송되지 않고 이 브라우저에만 저장됩니다.</p>
   </div>
 </footer>
+
+<dialog id="auth-dialog" aria-labelledby="auth-title">
+  <form id="auth-form" method="dialog">
+    <div class="dialog-head"><h3 id="auth-title">로그인</h3><button class="link-btn" type="button" data-close>닫기</button></div>
+    <label class="field" id="auth-name-field" hidden><span>표시 이름 (Wiki에 공개될 수 있으니 별명을 권장합니다)</span><input type="text" id="auth-name" maxlength="30" autocomplete="nickname"></label>
+    <label class="field"><span>이메일</span><input type="email" id="auth-email" required autocomplete="email"></label>
+    <label class="field"><span>비밀번호 (8자 이상)</span><input type="password" id="auth-password" required minlength="8" autocomplete="current-password"></label>
+    <p class="form-msg" id="auth-msg" role="alert"></p>
+    <div class="dialog-actions">
+      <button class="btn small" type="submit" id="auth-submit">로그인</button>
+      <button class="link-btn" type="button" id="auth-switch">계정 만들기</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="wide" id="notes-dialog" aria-labelledby="notes-title">
+  <div class="dialog-head"><h3 id="notes-title">내 노트</h3><button class="link-btn" type="button" data-close>닫기</button></div>
+  <div id="notes-list"></div>
+  <p class="form-msg" id="notes-msg" role="alert"></p>
+</dialog>
 
 <div class="toast" id="toast" role="status"></div>
 <noscript><p style="padding:12px 20px;background:#FFE45C;color:#132B27">실습 도구와 계산기를 쓰려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
 <script>
 (function () {
   'use strict';
 
   /* GitHub 저장소 주소를 넣으면 템플릿 영역에 기여 링크가 나타납니다.
      예: 'https://github.com/사용자이름/craft' */
-  var CONFIG = { repoUrl: '' };
+  var CONFIG = {
+    repoUrl: '',
+    /* Supabase 값을 넣으면 로그인, 클라우드 저장, 학급 Wiki가 켜집니다.
+       공개용 키(Publishable 또는 anon)만 넣으세요. secret, service_role 키는 절대 넣지 마세요. */
+    supabaseUrl: '',
+    supabaseKey: ''
+  };
 
   var STORE_KEY = 'craft-workbench-v1';
   var STEPS = ['1 입수', '2 메커니즘', '3 결함', '4 대안', '비평문 뼈대'];
@@ -742,6 +822,8 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
       body: '# [비평문 제목]\n\n## 서론\n- 다룰 글과 기술:\n- 이 글을 고른 이유:\n- 나의 논지 한 문장:\n\n## 본론 1. 메커니즘 정리\n- 저자의 핵심 주장:\n- 주장을 지탱하는 인과 사슬:\n\n## 본론 2. 기술적 타당성 비평\n- 결함:\n- 글에서 찾은 증거:\n- 이 결함이 결론에 주는 영향:\n\n## 본론 3. 윤리적 한계 비평\n- 영향을 받는 사람:\n- 드러나지 않은 비용:\n\n## 본론 4. 공학적 대안\n- 제안:\n- 검증 방법:\n- 대안의 한계:\n\n## 결론\n- 논지 다시 쓰기:\n- 읽기 전과 달라진 판단:\n- 남은 질문:\n\n## 참고 자료\n- 저자, 제목, 연도, URL' }
   ];
 
+  var CLOUD = { sb: null, user: null, wiki: [] };
+
   /* 공통 도구 */
   function $(id) { return document.getElementById(id); }
   function esc(v) {
@@ -782,6 +864,7 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
   function blank() {
     return {
       step: 0,
+      cloudId: null,
       meta: { title: '', source: '', question: '' },
       text: '',
       sentences: [],
@@ -1000,7 +1083,16 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
     return '<h3>비평문 뼈대</h3><p class="panel-guide">네 단계의 메모를 비평문 순서로 모았습니다. 완성된 글이 아니므로 이 뼈대를 바탕으로 직접 문단을 쓰세요.</p>' +
       '<div class="export"><button class="btn small" type="button" data-act="copy-md">Markdown 복사</button>' +
       '<button class="btn small line" type="button" data-act="save-md">.md 파일 내려받기</button></div>' +
-      '<pre class="preview" tabindex="0">' + esc(buildMarkdown()) + '</pre>' + navHtml(4);
+      '<pre class="preview" tabindex="0">' + esc(buildMarkdown()) + '</pre>' + submitHtml() + navHtml(4);
+  }
+
+  function submitHtml() {
+    if (!CLOUD.sb) return '';
+    var options = TEMPLATES.map(function (t) { return '<option>' + esc(t.name) + '</option>'; }).join('');
+    return '<div class="submit-box"><h4 class="subhead">학급 Wiki에 제출</h4>' +
+      '<p class="hint">위 내용이 그대로 제출되며, 관리자가 승인하면 표시 이름과 함께 공개됩니다. 논문 원문을 길게 옮긴 부분은 제출 전에 빼 주세요.</p>' +
+      '<label class="field" style="margin-top:10px"><span>분류</span><select id="wiki-category">' + options + '</select></label>' +
+      '<button class="btn small" type="button" data-act="wiki-submit">Wiki에 제출</button></div>';
   }
 
   function emptyView(msg, step, label) {
@@ -1247,6 +1339,7 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
       toast('결함 목록에 옮겼습니다. 4단계에서 대안을 적으세요.');
     } else if (act === 'copy-md') copyText(buildMarkdown(), 'Markdown을 복사했습니다.');
     else if (act === 'save-md') saveMarkdown();
+    else if (act === 'wiki-submit') submitWiki(b);
   });
   panelEl.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -1336,12 +1429,28 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
 
   /* 템플릿 */
   var wikiCurrent = 0;
+  function wikiItems() {
+    return TEMPLATES.concat(CLOUD.wiki.map(function (t) {
+      var author = t.profiles && t.profiles.user_name;
+      return {
+        name: t.title, cloudId: t.id, body: t.markdown_content,
+        sub: t.approved ? t.category : '승인 대기',
+        meta: (t.approved ? '' : '승인 대기 중이며 나에게만 보입니다. ') + (author ? '작성자: ' + author : ''),
+        own: !!CLOUD.user && t.user_id === CLOUD.user.id
+      };
+    }));
+  }
   function renderWiki() {
-    $('wiki-list').innerHTML = TEMPLATES.map(function (t, i) {
+    var items = wikiItems();
+    if (wikiCurrent >= items.length) wikiCurrent = 0;
+    var cur = items[wikiCurrent];
+    $('wiki-list').innerHTML = items.map(function (t, i) {
       return '<button type="button" data-tpl="' + i + '" aria-pressed="' + (i === wikiCurrent) + '">' + esc(t.name) + '<span>' + esc(t.sub) + '</span></button>';
     }).join('');
-    $('wiki-doc-title').textContent = TEMPLATES[wikiCurrent].name + ' 템플릿';
-    $('wiki-doc-body').textContent = TEMPLATES[wikiCurrent].body;
+    $('wiki-doc-title').textContent = cur.cloudId ? cur.name : cur.name + ' 템플릿';
+    $('wiki-doc-body').textContent = cur.body;
+    $('wiki-meta').textContent = cur.meta || '';
+    $('wiki-del').hidden = !cur.own;
   }
   $('wiki-list').addEventListener('click', function (e) {
     var b = e.target.closest('[data-tpl]');
@@ -1352,7 +1461,16 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
     if (again) again.focus();
   });
   $('wiki-copy').addEventListener('click', function () {
-    copyText(TEMPLATES[wikiCurrent].body, '템플릿을 복사했습니다.');
+    copyText(wikiItems()[wikiCurrent].body, '템플릿을 복사했습니다.');
+  });
+  $('wiki-del').addEventListener('click', async function () {
+    var cur = wikiItems()[wikiCurrent];
+    if (!cur.own || !window.confirm('이 제출을 삭제할까요?')) return;
+    var res = await CLOUD.sb.from('wiki_templates').delete().eq('id', cur.cloudId);
+    if (res.error) { toast(cloudError(res.error)); return; }
+    wikiCurrent = 0;
+    await loadWiki();
+    toast('제출을 삭제했습니다.');
   });
   if (CONFIG.repoUrl) {
     var contrib = $('wiki-contrib');
@@ -1395,7 +1513,245 @@ footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; f
     }, 2600);
   }
 
+  /* 클라우드: 로그인 */
+  function cloudError(err) {
+    var m = (err && err.message) || '';
+    if (/Invalid login credentials/i.test(m)) return '이메일이나 비밀번호가 맞지 않습니다.';
+    if (/already registered/i.test(m)) return '이미 가입한 이메일입니다. 로그인해 주세요.';
+    if (/Email not confirmed/i.test(m)) return '메일함에서 가입 확인 링크를 먼저 눌러 주세요.';
+    if (/Password should/i.test(m)) return '비밀번호가 너무 짧거나 단순합니다. 더 길게 입력하세요.';
+    if (/rate limit|too many/i.test(m)) return '요청이 너무 많습니다. 잠시 뒤 다시 시도하세요.';
+    if (/row-level security|JWT|permission denied/i.test(m)) return '권한이 없습니다. 다시 로그인한 뒤 시도하세요.';
+    if (/fetch|network/i.test(m)) return '서버에 연결하지 못했습니다. 인터넷 연결을 확인하세요.';
+    return '요청을 처리하지 못했습니다: ' + m;
+  }
+
+  var authMode = 'login', afterLogin = null;
+  function setAuthMode(mode) {
+    authMode = mode;
+    var signup = mode === 'signup';
+    $('auth-title').textContent = signup ? '계정 만들기' : '로그인';
+    $('auth-submit').textContent = signup ? '계정 만들기' : '로그인';
+    $('auth-switch').textContent = signup ? '이미 계정이 있습니다' : '계정 만들기';
+    $('auth-name-field').hidden = !signup;
+    $('auth-name').required = signup;
+    $('auth-password').autocomplete = signup ? 'new-password' : 'current-password';
+    $('auth-msg').textContent = '';
+  }
+  function openAuth(next) {
+    afterLogin = next || null;
+    setAuthMode('login');
+    $('auth-dialog').showModal();
+  }
+  function renderAccount() {
+    var box = $('account');
+    box.hidden = false;
+    if (CLOUD.user) {
+      var name = (CLOUD.user.user_metadata && CLOUD.user.user_metadata.user_name) || '회원';
+      box.innerHTML = '<span class="account-name">' + esc(name) + '</span><button type="button" id="auth-out">로그아웃</button>';
+    } else {
+      box.innerHTML = '<button type="button" id="auth-open">로그인</button>';
+    }
+  }
+  $('account').addEventListener('click', async function (e) {
+    if (e.target.id === 'auth-open') openAuth();
+    if (e.target.id === 'auth-out') {
+      var wipe = hasWork() && window.confirm('이 브라우저에 남은 실습 내용도 지울까요? 공용 컴퓨터라면 지우는 것을 권장합니다.');
+      await CLOUD.sb.auth.signOut();
+      var measure = state.measure, keep = state;
+      state = wipe ? blank() : keep;
+      if (wipe) state.measure = measure;
+      state.cloudId = null;
+      save();
+      render();
+      toast('로그아웃했습니다.');
+    }
+  });
+  $('auth-switch').addEventListener('click', function () {
+    setAuthMode(authMode === 'login' ? 'signup' : 'login');
+  });
+  document.querySelectorAll('[data-close]').forEach(function (b) {
+    b.addEventListener('click', function () { b.closest('dialog').close(); });
+  });
+  $('auth-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var email = $('auth-email').value.trim(), password = $('auth-password').value;
+    var name = $('auth-name').value.trim(), msg = $('auth-msg'), btn = $('auth-submit');
+    msg.textContent = '';
+    btn.disabled = true;
+    var res;
+    try {
+      res = authMode === 'signup'
+        ? await CLOUD.sb.auth.signUp({ email: email, password: password, options: { data: { user_name: name } } })
+        : await CLOUD.sb.auth.signInWithPassword({ email: email, password: password });
+    } catch (err) { res = { error: err }; }
+    btn.disabled = false;
+    if (res.error) { msg.textContent = cloudError(res.error); return; }
+    if (!res.data.session) { setAuthMode('login'); msg.textContent = '메일함에서 가입 확인 링크를 누른 뒤 로그인하세요.'; return; }
+    $('auth-password').value = '';
+    $('auth-dialog').close();
+    toast(authMode === 'signup' ? '계정을 만들었습니다.' : '로그인했습니다.');
+    var next = afterLogin;
+    afterLogin = null;
+    if (next) setTimeout(next, 0);
+  });
+
+  /* 클라우드: 노트 */
+  async function cloudSave() {
+    if (!CLOUD.user) { openAuth(cloudSave); return; }
+    if (!hasWork()) { toast('먼저 분석할 글을 입력하세요.'); return; }
+    var btn = $('cloud-save');
+    var body = {
+      title: (state.meta.title || '').trim().slice(0, 200) || '제목 없는 글',
+      source: state.meta.source.slice(0, 300),
+      question: state.meta.question.slice(0, 500),
+      raw_text: state.text,
+      data: { sentences: state.sentences, links: state.links, flaws: state.flaws, reflect: state.reflect }
+    };
+    btn.disabled = true;
+    var res = { data: null };
+    if (state.cloudId) {
+      body.updated_at = new Date().toISOString();
+      res = await CLOUD.sb.from('craft_entries').update(body).eq('id', state.cloudId).select('id').maybeSingle();
+      delete body.updated_at;
+    }
+    if (!res.error && !res.data) res = await CLOUD.sb.from('craft_entries').insert(body).select('id').single();
+    btn.disabled = false;
+    if (res.error) { toast(cloudError(res.error)); return; }
+    state.cloudId = res.data.id;
+    save();
+    toast('클라우드에 저장했습니다.');
+  }
+  async function openNotes() {
+    if (!CLOUD.user) { openAuth(openNotes); return; }
+    var list = $('notes-list');
+    $('notes-msg').textContent = '';
+    list.textContent = '불러오는 중입니다.';
+    $('notes-dialog').showModal();
+    var res = await CLOUD.sb.from('craft_entries').select('id, title, updated_at').order('updated_at', { ascending: false }).limit(100);
+    if (res.error) { list.textContent = ''; $('notes-msg').textContent = cloudError(res.error); return; }
+    if (!res.data.length) { list.innerHTML = '<div class="empty">저장한 노트가 없습니다.</div>'; return; }
+    list.innerHTML = res.data.map(function (n) {
+      return '<div class="note-row"><span>' + esc(n.title) + '<span class="meta">' + esc(new Date(n.updated_at).toLocaleString('ko-KR')) + '</span></span>' +
+        '<span class="acts"><button class="btn small" type="button" data-note-open="' + esc(n.id) + '">불러오기</button>' +
+        '<button class="remove" type="button" data-note-del="' + esc(n.id) + '">삭제</button></span></div>';
+    }).join('');
+  }
+  $('notes-list').addEventListener('click', async function (e) {
+    var open = e.target.dataset.noteOpen, del = e.target.dataset.noteDel, res;
+    if (open) {
+      if (hasWork() && state.cloudId !== open && !window.confirm('지금 실습 내용을 이 노트로 바꿀까요? 저장하지 않은 내용은 사라집니다.')) return;
+      res = await CLOUD.sb.from('craft_entries').select('id, title, source, question, raw_text, data').eq('id', open).single();
+      if (res.error) { $('notes-msg').textContent = cloudError(res.error); return; }
+      var d = res.data.data || {}, next = blank();
+      next.measure = state.measure;
+      next.cloudId = res.data.id;
+      next.meta = { title: res.data.title, source: res.data.source, question: res.data.question };
+      next.text = res.data.raw_text;
+      next.sentences = d.sentences || [];
+      next.links = d.links || [];
+      next.flaws = d.flaws || [];
+      next.reflect = d.reflect || next.reflect;
+      state = next;
+      save();
+      render();
+      $('notes-dialog').close();
+      toast('노트를 불러왔습니다.');
+    } else if (del) {
+      if (!window.confirm('이 노트를 삭제할까요? 되돌릴 수 없습니다.')) return;
+      res = await CLOUD.sb.from('craft_entries').delete().eq('id', del);
+      if (res.error) { $('notes-msg').textContent = cloudError(res.error); return; }
+      if (state.cloudId === del) { state.cloudId = null; save(); }
+      openNotesRefresh();
+    }
+  });
+  function openNotesRefresh() { $('notes-dialog').close(); openNotes(); }
+
+  /* 클라우드: Wiki */
+  async function loadWiki() {
+    var res = await CLOUD.sb.from('wiki_templates')
+      .select('id, user_id, title, category, markdown_content, approved, profiles(user_name)')
+      .order('created_at', { ascending: false }).limit(100);
+    CLOUD.wiki = res.error ? [] : res.data;
+    renderWiki();
+  }
+  async function submitWiki(btn) {
+    if (!CLOUD.user) { openAuth(); return; }
+    btn.disabled = true;
+    var res = await CLOUD.sb.from('wiki_templates').insert({
+      entry_id: state.cloudId,
+      title: (state.meta.title || '').trim().slice(0, 200) || '제목 없는 글',
+      category: $('wiki-category').value,
+      markdown_content: buildMarkdown().slice(0, 40000)
+    });
+    btn.disabled = false;
+    if (res.error) { toast(cloudError(res.error)); return; }
+    await loadWiki();
+    toast('제출했습니다. 승인되면 공개됩니다.');
+  }
+
+  /* 클라우드: 측정 */
+  async function loadStats() {
+    var box = $('class-stats'), text = $('class-stats-text');
+    box.hidden = !CLOUD.user;
+    if (!CLOUD.user) return;
+    var res = await CLOUD.sb.rpc('class_density_stats');
+    var r = res.data && res.data[0];
+    if (res.error || !r) { text.textContent = '학급 평균을 불러오지 못했습니다.'; return; }
+    text.textContent = r.avg_pre === null
+      ? '지금까지 ' + r.participants + '명이 참여했습니다. 3명 이상 모이면 평균을 보여 줍니다.'
+      : r.participants + '명, 측정 ' + r.measurements + '회: 적용 전 ' + Number(r.avg_pre).toFixed(2) + ', 적용 후 ' + Number(r.avg_post).toFixed(2);
+  }
+  async function saveMeasure() {
+    if (!CLOUD.user) { openAuth(saveMeasure); return; }
+    var pre = state.measure.pre, post = state.measure.post;
+    if (density(pre) === null || density(post) === null || pre.c == null || post.c == null) {
+      toast('적용 전과 후의 값을 모두 입력하세요.');
+      return;
+    }
+    function n(v) { return Math.floor(+v || 0); }
+    var btn = $('m-save');
+    btn.disabled = true;
+    var res = await CLOUD.sb.from('density_experiments').insert({
+      pre_core: n(pre.core), pre_evidence: n(pre.ev), pre_bg: n(pre.bg), pre_c: n(pre.c),
+      post_core: n(post.core), post_evidence: n(post.ev), post_bg: n(post.bg), post_c: n(post.c)
+    });
+    btn.disabled = false;
+    if (res.error) { toast(cloudError(res.error)); return; }
+    await loadStats();
+    toast('측정 결과를 저장했습니다.');
+  }
+
+  function initCloud() {
+    if (!CONFIG.supabaseUrl || !CONFIG.supabaseKey) return;
+    if (!window.supabase) {
+      $('foot-note').textContent = '서버 연결 도구를 불러오지 못해 이 브라우저 저장만 사용합니다. 새로고침해 다시 시도하세요.';
+      return;
+    }
+    CLOUD.sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+    $('cloud-save').hidden = false;
+    $('cloud-notes').hidden = false;
+    $('m-save').hidden = false;
+    $('practice-store').textContent = '작성 중에는 이 브라우저에 저장되고, 클라우드에 저장하면 다른 기기에서도 이어서 쓸 수 있습니다.';
+    $('foot-note').textContent = 'CRAFT 프로토타입. 저장 버튼을 누른 내용만 서버로 전송됩니다. 노트와 개인 측정값은 본인만 볼 수 있고, 승인된 Wiki 글은 공개됩니다.';
+    $('cloud-save').addEventListener('click', cloudSave);
+    $('cloud-notes').addEventListener('click', openNotes);
+    $('m-save').addEventListener('click', saveMeasure);
+    renderAccount();
+    CLOUD.sb.auth.onAuthStateChange(function (event, session) {
+      /* SDK 내부 잠금과 겹치지 않도록 다음 틱에서 처리합니다. */
+      setTimeout(function () {
+        CLOUD.user = session ? session.user : null;
+        renderAccount();
+        loadWiki();
+        loadStats();
+        if (state.step === 4) render();
+      }, 0);
+    });
+  }
+
   /* 시작 */
+  initCloud();
   if (typeof state.step !== 'number' || !VIEWS[state.step]) state.step = 0;
   render();
   fillMeasure();
