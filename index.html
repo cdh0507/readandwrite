@@ -3,32 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRAFT 공학 글 분해 독서법</title>
-<meta name="description" content="공학 글을 네 단계로 분해해 읽고, 비평문의 뼈대까지 만드는 독서와 작문 프레임워크입니다.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230F4C45'/%3E%3Cpath d='M8 8h16M8 16h16M8 24h9' stroke='%23FFE45C' stroke-width='3'/%3E%3C/svg%3E">
+<title>CRAFT 분석 위키</title>
+<meta name="description" content="논문과 책을 네 단계로 분해한 기록을 찾고, 올리고, 함께 고치는 학급 분석 위키입니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231D3F6E'/%3E%3Cpath d='M8 8h16M8 16h16M8 24h9' stroke='%23FFFFFF' stroke-width='3'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --mat: #0F4C45;
-  --mat-deep: #0B3B36;
-  --mat-line: rgba(190, 235, 220, .13);
-  --mat-text: #DDEDE7;
-  --ground: #EEF3F0;
+  --mat: #1D3F6E;
+  --mat-deep: #16304F;
+  --mat-line: transparent;
+  --mat-text: #1C2530;
+  --ground: #EDF0F3;
   --paper: #FFFFFF;
-  --ink: #132B27;
-  --soft: #4A615B;
-  --rule: #C9D6D1;
-  --marker: #FFE45C;
-  --blue: #1C58C4;
-  --blue-tint: #DCE8FB;
-  --red: #C0202B;
-  --red-tint: #FBE3E4;
-  --gray-tint: #E3EAE7;
-  --serif: 'Hahmlet', 'Apple SD Gothic Neo', 'Noto Serif KR', 'Batang', serif;
+  --ink: #1C2530;
+  --soft: #55606E;
+  --rule: #C6CED7;
+  --marker: #FFE98A;
+  --blue: #1D4FA0;
+  --blue-tint: #E2EBF8;
+  --red: #B3261E;
+  --red-tint: #FBE6E4;
+  --gray-tint: #E8ECF0;
+  --green: #1F6B53;
+  --green-tint: #DDF0E8;
+  --gold-tint: #FBF1CC;
+  --gold-line: #B5952B;
+  --serif: 'Noto Serif KR', 'Apple SD Gothic Neo', 'Batang', serif;
   --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
-  --wrap: 1180px;
+  --wrap: 100%;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -61,46 +65,6 @@ button { cursor: pointer; }
 }
 .skip:focus { top: 8px; }
 
-.mat {
-  background-color: var(--mat);
-  background-image:
-    linear-gradient(var(--mat-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--mat-line) 1px, transparent 1px),
-    linear-gradient(rgba(190, 235, 220, .1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(190, 235, 220, .1) 1px, transparent 1px);
-  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
-  color: var(--mat-text);
-}
-
-/* 상단 내비게이션 */
-.topbar {
-  position: sticky; top: 0; z-index: 20;
-  background: var(--mat-deep);
-  color: var(--mat-text);
-}
-.topbar .wrap { display: flex; align-items: center; gap: 28px; height: 56px; }
-.brand {
-  font: 800 1.2rem/1 var(--serif); letter-spacing: .08em;
-  color: #fff; text-decoration: none;
-}
-.topbar ul { display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; }
-.topbar ul::-webkit-scrollbar { display: none; }
-.topbar li a {
-  display: block; padding: 4px 0; white-space: nowrap;
-  text-decoration: none; font-size: .95rem;
-  border-bottom: 2px solid transparent;
-}
-.topbar li a:hover { border-color: var(--marker); }
-.topbar ul { min-width: 0; }
-.topbar :focus-visible { outline-color: var(--marker); }
-.account { flex: none; display: flex; align-items: center; gap: 10px; margin-left: auto; font-size: .92rem; }
-.account[hidden] { display: none; }
-.account button {
-  padding: 3px 10px; background: none; color: #fff; white-space: nowrap;
-  border: 1px solid rgba(255, 255, 255, .55); border-radius: 2px;
-}
-.account button:hover { background: #fff; color: var(--ink); }
-
 /* 버튼 */
 .btn {
   display: inline-block; padding: 10px 18px;
@@ -118,19 +82,6 @@ button { cursor: pointer; }
 .mat .btn.primary:hover { background: #fff; border-color: #fff; }
 .mat .btn.ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
 .mat .btn.ghost:hover { background: #fff; color: var(--ink); border-color: #fff; }
-
-/* 히어로 */
-.hero { padding: clamp(40px, 7vw, 88px) 0 clamp(56px, 8vw, 104px); }
-.hero-grid {
-  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: clamp(32px, 5vw, 72px); align-items: center;
-}
-.hero h1 {
-  font-size: clamp(2.7rem, 6.2vw, 4.9rem); font-weight: 800;
-  color: #fff; line-height: 1.14; letter-spacing: -.02em;
-}
-.hero-lead { margin-top: 28px; max-width: 34em; font-size: 1.1rem; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 
 .lens-tabs { display: flex; gap: 4px; padding-left: 18px; }
 .lens-tabs button {
@@ -349,40 +300,45 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 .calc-result { margin-top: 12px; font: 600 1.08rem/1.6 var(--serif); }
 .calc-actions { margin-top: 16px; }
 
-/* 템플릿 */
-.wiki {
-  display: grid; grid-template-columns: 270px minmax(0, 1fr);
-  gap: 0; margin-top: 36px; background: var(--paper);
-}
-.wiki-list { background: var(--gray-tint); padding: 8px 0; }
-.wiki-list button {
-  display: block; width: 100%; padding: 12px 18px; text-align: left;
-  background: none; border: 0; border-left: 5px solid transparent; line-height: 1.5;
-}
-.wiki-list button span { display: block; font-size: .86rem; color: var(--soft); }
-.wiki-list button:hover { background: var(--ground); }
-.wiki-list button[aria-pressed="true"] { background: var(--paper); border-left-color: var(--mat); font-weight: 700; }
-.wiki-list button[aria-pressed="true"] span { font-weight: 400; }
-.wiki-doc { padding: clamp(20px, 3vw, 32px); min-width: 0; }
-.wiki-head { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.wiki-doc pre {
-  margin: 0; padding: 18px; max-height: 480px; overflow: auto;
-  background: var(--ground); white-space: pre-wrap;
-  font: 400 .95rem/1.75 var(--sans);
-}
-.wiki-contrib { margin-top: 16px; color: var(--soft); }
+/* 화면 구성 */
+.view[hidden] { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* 글쓰기 */
+.editor { background: var(--paper); padding: clamp(20px, 3vw, 34px); }
+.editor h1 { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 800; margin-bottom: 20px; }
+.editor-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 8px; }
+.editor-tabs { display: flex; gap: 4px; margin-left: auto; }
+.editor-tabs button { padding: 4px 12px; background: var(--ground); border: 0; font-size: .92rem; }
+.editor-tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+#e-body { min-height: 420px; font-family: var(--serif); }
+.editor .prose { margin-top: 0; padding: 18px; min-height: 420px; border: 1.5px solid #8FA39C; }
+.file-btn { position: relative; }
+.measure-box { margin: 20px 0; padding: 14px 16px; background: var(--ground); }
+.measure-box summary { cursor: pointer; font: 600 1.06rem/1.5 var(--serif); }
+.measure-box .calc { padding: 12px 0 0; background: none; }
+.editor-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 20px; }
+.notice { padding: 28px; background: var(--paper); text-align: center; }
+.notice .btn { margin-top: 12px; }
 
-/* 근거 */
-.basis { margin-top: 36px; width: 100%; border-collapse: collapse; }
-.basis th, .basis td { padding: 15px 16px 15px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
-.basis thead th { border-bottom: 3px solid var(--ink); font-weight: 700; }
-.basis tbody th { font: 600 1.05rem/1.5 var(--serif); width: 27%; }
-.basis tbody th small { display: block; font: 400 .88rem/1.5 var(--sans); color: var(--soft); }
-.road { margin-top: 44px; }
-.road ol { margin-top: 16px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; counter-reset: road; border-top: 3px solid var(--mat); }
-.road li { padding: 14px 18px 0 0; counter-increment: road; }
-.road li::before { content: counter(road) "단계"; display: block; font: 800 1.05rem/1.6 var(--serif); color: var(--mat); }
-.road li.ext::before { content: "확장"; }
+/* 소개 */
+.about h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; }
+.about-text { max-width: 44em; margin-top: 16px; font: 400 1.14rem/1.95 var(--serif); }
+.about-sec { margin-top: clamp(40px, 6vw, 64px); }
+.about-sec h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+.refs { margin-top: 16px; border-top: 3px solid var(--ink); }
+.refs li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.refs b { display: block; font: 600 1.06rem/1.5 var(--serif); }
+.refs small { color: var(--soft); font-size: .9rem; }
+
+/* 실습 보조 */
+.ref-list { max-height: 260px; overflow-y: auto; margin: 8px 0 16px; border: 1.5px solid #8FA39C; }
+.ref-list li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 6px; padding: 7px 10px; font: 400 1rem/1.75 var(--serif); cursor: text; border-bottom: 1px solid var(--gray-tint); }
+.ref-list li .n { color: var(--soft); text-align: right; }
+.ref-list li.w3 > span:last-child { background: var(--marker); }
+.ref-list li.w2 > span:last-child { background: var(--blue-tint); }
+.ref-list li.on { outline: 2px solid var(--blue); outline-offset: -2px; }
+.field.active input { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-tint); }
+.row-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
 
 footer { background: var(--mat-deep); color: var(--mat-text); padding: 30px 0; font-size: .92rem; }
 
@@ -429,6 +385,8 @@ input[type="email"], input[type="password"] {
 @media (max-width: 980px) {
   .hero-grid, .measure-grid { grid-template-columns: 1fr; }
   .wb-layout { grid-template-columns: minmax(0, 1fr); }
+  .article-layout { grid-template-columns: minmax(0, 1fr); }
+  .info { position: static; }
   .meter { position: static; margin-top: 0; }
   .meter dl { grid-template-columns: 1fr auto 1fr auto; }
   .stage { grid-template-columns: 62px minmax(0, 1fr) minmax(0, 1fr); }
@@ -437,14 +395,14 @@ input[type="email"], input[type="password"] {
   .stage-out { grid-column: 3; }
   .add-form { grid-template-columns: 1fr 1fr; }
   .add-form .add-btn { grid-column: 1 / -1; justify-self: start; }
-  .road ol { grid-template-columns: 1fr 1fr; row-gap: 8px; }
 }
 @media (max-width: 680px) {
   body { font-size: .97rem; }
   .wrap { width: calc(100% - 32px); }
-  .topbar .wrap { gap: 16px; }
-  .topbar ul { gap: 16px; }
   .account-name { display: none; }
+  .refs li { grid-template-columns: 1fr; gap: 4px; }
+  .wiki-bar .btn { margin-left: 0; }
+  .editor-tabs { margin-left: 0; }
   .lens-tabs { padding-left: 0; }
   .lens-tabs button { flex: 1; padding-inline: 2px; font-size: .84rem; }
   .versus, .field-row { grid-template-columns: 1fr; gap: 16px; }
@@ -456,52 +414,340 @@ input[type="email"], input[type="password"] {
   .roles { grid-column: 2; }
   .add-form, .add-form.flaw { grid-template-columns: 1fr; padding: 12px; }
   .meter dl { grid-template-columns: 1fr auto; }
-  .wiki { grid-template-columns: 1fr; }
-  .wiki-list { display: flex; overflow-x: auto; padding: 0; scrollbar-width: none; }
-  .wiki-list button { flex: none; width: auto; border-left: 0; border-bottom: 4px solid transparent; padding: 10px 14px; white-space: nowrap; }
-  .wiki-list button span { display: none; }
-  .wiki-list button[aria-pressed="true"] { border-bottom-color: var(--mat); }
-  .basis, .basis thead, .basis tbody, .basis tr, .basis th, .basis td { display: block; width: auto; }
-  .basis thead { display: none; }
-  .basis tbody tr { padding: 12px 0; border-bottom: 1px solid var(--rule); }
-  .basis th, .basis td { border: 0; padding: 3px 0; }
   .calc th, .calc td { padding: 6px 4px; }
-  .road ol { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
+}
+
+/* ===== 위키 레이아웃 ===== */
+body { background: var(--ground); font-size: 1rem; line-height: 1.7; }
+h1, h2, h3 { font-weight: 700; }
+a { color: var(--blue); }
+.wrap { width: 100%; margin: 0; }
+.skip { z-index: 60; }
+
+.site-head { position: sticky; top: 0; z-index: 20; background: var(--mat-deep); color: #fff; }
+.head-in { display: flex; align-items: center; gap: 24px; max-width: 1320px; margin: 0 auto; padding: 10px 20px; }
+.brand { display: flex; align-items: center; gap: 10px; flex: none; color: #fff; text-decoration: none; }
+.brand-mark {
+  display: grid; place-items: center; width: 34px; height: 34px;
+  background: #fff; color: var(--mat-deep); font: 700 1.2rem/1 var(--serif);
+}
+.brand-name { font: 700 1.08rem/1.25 var(--serif); }
+.head-search { display: flex; flex: 1; max-width: 620px; margin: 0; }
+.head-search input {
+  flex: 1; min-width: 0; height: 40px; padding: 0 12px; background: #fff; color: var(--ink);
+  border: 0; border-radius: 2px 0 0 2px; font-size: .98rem;
+}
+.head-search button {
+  flex: none; padding: 0 16px; background: var(--marker); color: var(--ink); border: 0;
+  border-radius: 0 2px 2px 0; font-weight: 500;
+}
+.site-head :focus-visible { outline-color: var(--marker); }
+.account { flex: none; display: flex; align-items: center; gap: 10px; margin-left: auto; font-size: .92rem; }
+.account[hidden] { display: none; }
+.account button {
+  padding: 4px 11px; background: none; color: #fff; white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, .6); border-radius: 2px;
+}
+.account button:hover { background: #fff; color: var(--ink); }
+
+.shell {
+  display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 0 22px;
+  max-width: 1320px; margin: 0 auto; padding: 18px 20px 32px; align-items: start;
+}
+.side { position: sticky; top: 78px; font-size: .94rem; }
+.side h2 { margin: 16px 0 3px; padding-bottom: 3px; font: 500 .84rem/1.4 var(--sans); color: var(--soft); border-bottom: 1px solid var(--rule); }
+.side div:first-child h2 { margin-top: 0; }
+.side a { display: block; padding: 3px 8px; margin-left: -8px; text-decoration: none; }
+.side a:hover { text-decoration: underline; }
+.side a[aria-current="page"] { color: var(--ink); font-weight: 700; background: var(--paper); }
+main { min-width: 0; }
+.view[hidden] { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 문서 종이 */
+.paper, #view-article > .block, #view-editor > .block, #view-about > .block {
+  background: var(--paper); border: 1px solid var(--rule); padding: clamp(18px, 3vw, 34px);
+}
+section.block { scroll-margin-top: 70px; }
+.page-title { padding-bottom: 8px; margin-bottom: 14px; border-bottom: 2px solid var(--ink); font: 700 clamp(1.7rem, 3vw, 2.2rem)/1.3 var(--serif); }
+.about h1, .editor h1, .prac-h1 { padding-bottom: 8px; border-bottom: 2px solid var(--ink); font: 700 clamp(1.7rem, 3vw, 2.2rem)/1.3 var(--serif); letter-spacing: 0; }
+.editor { padding: 0; }
+
+/* 대문 */
+.front-intro { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px; align-items: center; padding: 16px 18px; margin-bottom: 18px; background: var(--blue-tint); border: 1px solid #B9CBE4; }
+.front-intro h2 { font-size: 1.36rem; }
+.front-intro p { margin-top: 4px; }
+.wiki-stats { grid-column: 1 / -1; margin: 0; font-size: .93rem; color: var(--soft); min-height: 1.6em; }
+.front-grid.solo { grid-template-columns: minmax(0, 1fr) !important; }
+.front-grid { display: grid; grid-template-columns: minmax(0, 1fr) 268px; gap: 24px; align-items: start; }
+.box-title { padding: 6px 12px; background: var(--gray-tint); border: 1px solid var(--rule); border-bottom: 0; font: 700 1.02rem/1.5 var(--serif); }
+.wiki-bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 10px; }
+.type-filter { display: flex; flex-wrap: wrap; gap: 3px; }
+.type-filter button { padding: 3px 11px; background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; font-size: .92rem; }
+.type-filter button:hover { border-color: var(--ink); }
+.type-filter button[aria-pressed="true"] { background: var(--mat); border-color: var(--mat); color: #fff; }
+.check { display: inline-flex; gap: 7px; align-items: center; font-size: .93rem; white-space: nowrap; }
+.results { border: 1px solid var(--rule); }
+.results > .empty { border: 0; }
+.result { padding: 11px 13px; border-bottom: 1px solid var(--gray-tint); }
+.result:last-child { border-bottom: 0; }
+.result h2 { font: 500 1.1rem/1.5 var(--sans); }
+.result h2 a { text-decoration: none; }
+.result h2 a:hover { text-decoration: underline; }
+.result .src { color: var(--soft); font-size: .92rem; }
+.result .sum { margin-top: 2px; font-size: .96rem; }
+.result .marks { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; align-items: center; }
+.badge { display: inline-block; padding: 0 7px; font-size: .82rem; font-weight: 500; border: 1px solid transparent; }
+.badge.measure { background: var(--gold-tint); border-color: var(--gold-line); color: #5D4B0E; }
+.badge.peer { background: var(--green-tint); border-color: var(--green); color: var(--green); }
+.badge.type { background: var(--gray-tint); }
+.tag { font-size: .86rem; color: var(--soft); }
+.more { margin-top: 12px; }
+.front-side .box-body { padding: 10px 12px; border: 1px solid var(--rule); margin-bottom: 16px; font-size: .95rem; }
+.cat-list li { padding: 2px 0; }
+.link-plain { padding: 0; background: none; border: 0; color: var(--blue); text-align: left; }
+.link-plain:hover { text-decoration: underline; }
+.legend-list li { padding: 4px 0; }
+
+/* 문서 */
+.doc-tabs { display: flex; gap: 2px; align-items: flex-end; margin: 0 0 -1px; padding-left: 2px; }
+.doc-tabs a, .doc-tabs button {
+  padding: 6px 15px; background: var(--gray-tint); color: var(--blue); border: 1px solid var(--rule);
+  border-radius: 2px 2px 0 0; font-size: .95rem; text-decoration: none;
+}
+.doc-tabs a:hover, .doc-tabs button:hover { background: var(--paper); }
+.doc-tabs .on { position: relative; z-index: 1; background: var(--paper); color: var(--ink); border-bottom-color: var(--paper); font-weight: 500; }
+.doc-tabs .del { margin-left: auto; color: var(--red); }
+#view-article > .block { padding: 0; background: none; border: 0; }
+.doc { position: relative; background: var(--paper); border: 1px solid var(--rule); padding: clamp(18px, 3vw, 34px); }
+.doc h1 { font: 700 clamp(1.7rem, 3.2vw, 2.3rem)/1.3 var(--serif); }
+.doc-sub { margin: 4px 0 14px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); color: var(--soft); font-size: .9rem; }
+.doc-lead { font: 400 1.08rem/1.9 var(--serif); }
+
+/* 검증 띠: 이 위키의 고유 요소 */
+.verify { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 18px; align-items: center; margin: 0 0 18px; padding: 11px 14px; border: 1px solid var(--rule); border-left: 6px solid var(--soft); background: #F6F7F9; }
+.verify.lv1 { border-color: var(--gold-line); background: var(--gold-tint); }
+.verify.lv2 { border-color: var(--green); background: var(--green-tint); }
+.verify-steps { display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 4px; font-size: .84rem; }
+.verify-steps li { padding: 0 9px; border-right: 1px solid var(--rule); color: var(--soft); }
+.verify-steps li:first-child { padding-left: 0; }
+.verify-steps li:last-child { border-right: 0; }
+.verify-steps li.done { color: var(--ink); font-weight: 700; }
+.verify p { font-size: .95rem; }
+.verify .btn { white-space: nowrap; }
+
+/* 문헌 정보 상자 */
+.infobox { float: right; clear: right; width: 290px; margin: 0 0 16px 24px; border: 1px solid var(--rule); background: #F8F9FA; font-size: .92rem; }
+.infobox h2 { padding: 7px 10px; background: var(--mat); color: #fff; font: 700 .98rem/1.45 var(--serif); text-align: center; }
+.infobox table { width: 100%; border-collapse: collapse; }
+.infobox th, .infobox td { padding: 5px 9px; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.infobox th { width: 78px; background: var(--gray-tint); font-weight: 500; }
+
+/* 목차 */
+.toc { display: inline-block; min-width: 230px; max-width: 100%; margin: 14px 0 6px; padding: 9px 16px 11px; border: 1px solid var(--rule); background: #F8F9FA; font-size: .95rem; }
+.toc h2 { font: 700 .98rem/1.6 var(--sans); }
+.toc li { padding: 1px 0; }
+.toc li.lv3 { padding-left: 16px; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.toc .no { color: var(--soft); margin-right: 6px; }
+
+.prose { margin-top: 12px; padding-top: 0; border-top: 0; font: 400 1.03rem/1.85 var(--sans); }
+.prose h1, .prose h2 { margin: 1.5em 0 .5em; padding-bottom: 4px; border-bottom: 1px solid var(--rule); font: 700 1.36rem/1.4 var(--serif); overflow: hidden; scroll-margin-top: 72px; }
+.prose h3 { margin: 1.3em 0 .4em; font: 700 1.12rem/1.4 var(--serif); scroll-margin-top: 72px; }
+.prose h4 { margin: 1.2em 0 .3em; font: 700 1rem/1.4 var(--sans); }
+.prose .secno { margin-right: 7px; color: var(--blue); }
+.prose p { margin: .7em 0; }
+.prose ul, .prose ol { margin: .7em 0; padding-left: 1.5em; list-style: revert; }
+.prose img { display: block; max-width: 100%; height: auto; margin: 1.1em 0; border: 1px solid var(--rule); }
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; margin: 1em 0; font-size: .95rem; }
+.prose th, .prose td { padding: 6px 10px; border: 1px solid var(--rule); text-align: left; }
+.prose th { background: var(--gray-tint); }
+.prose blockquote { margin: 1em 0; padding: 2px 14px; border-left: 4px solid var(--rule); color: var(--soft); }
+.prose code { padding: 0 .3em; background: var(--gray-tint); font-size: .92em; }
+.prose pre { overflow-x: auto; padding: 12px; background: var(--gray-tint); }
+.prose pre code { padding: 0; background: none; }
+.catbar { clear: both; margin-top: 26px; padding: 7px 11px; border: 1px solid var(--rule); background: #F8F9FA; font-size: .93rem; }
+.catbar b { margin-right: 6px; }
+.catbar button + button { margin-left: 10px; padding-left: 10px; border-left: 1px solid var(--rule); }
+.doc-foot { margin-top: 10px; color: var(--soft); font-size: .85rem; }
+
+/* 글쓰기 */
+#e-body { min-height: 380px; font-family: var(--sans); }
+.editor .prose { margin-top: 0; padding: 16px; min-height: 380px; border: 1.5px solid #8FA39C; }
+
+/* 실습과 소개를 문서 화면에 맞춤 */
+.mat { background: none; color: var(--ink); }
+.btn, .btn.primary, .mat .btn.primary { background: var(--mat); border: 1px solid var(--mat); color: #fff; border-radius: 2px; }
+.btn:hover, .mat .btn.primary:hover { background: var(--mat-deep); border-color: var(--mat-deep); color: #fff; }
+.btn.line, .btn.ghost, .mat .btn.ghost { background: var(--paper); color: var(--blue); border: 1px solid var(--rule); }
+.btn.line:hover, .btn.ghost:hover, .mat .btn.ghost:hover { background: var(--gray-tint); color: var(--blue); border-color: var(--rule); }
+.btn.danger { background: var(--paper); color: var(--red); border-color: var(--red); }
+#view-practice { background: var(--paper); border: 1px solid var(--rule); padding: clamp(18px, 3vw, 34px); }
+#view-practice h2 { font: 700 1.5rem/1.35 var(--serif); padding-bottom: 5px; border-bottom: 1px solid var(--rule); color: var(--ink); }
+#view-practice .lead, #practice-tool .lead { margin-top: 8px; color: var(--soft); font-size: 1rem; }
+#view-practice section.block, #practice-tool { padding: 34px 0 0; }
+.prac-lead { margin-top: 10px; max-width: 46em; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+.lens-tabs { padding-left: 0; }
+.lens-tabs button, .wb-tabs button { background: var(--gray-tint); color: var(--blue); border: 1px solid var(--rule); border-bottom: 0; }
+.lens-tabs button:hover, .wb-tabs button:hover { background: var(--paper); }
+.lens-tabs button[aria-pressed="true"], .wb-tabs button[aria-current="step"] { background: var(--paper); color: var(--ink); }
+.wb-tabs { padding-left: 0; }
+.sheet-body, .panel { border: 1px solid var(--rule); box-shadow: none; }
+.specimen { font-family: var(--serif); }
+.stages { border-top: 2px solid var(--ink); }
+.stage-no { font: 700 2.2rem/1 var(--serif); color: var(--mat); }
+.stage h3 { font-size: 1.15rem; }
+.note-plain { background: var(--gray-tint); }
+.note-craft { border: 1px solid var(--rule); border-left: 6px solid var(--gold-line); }
+.versus-end { font-size: 1.08rem; }
+.wb-saved { color: var(--soft); }
+.meter { top: 78px; background: #F8F9FA; border: 1px solid var(--rule); color: var(--ink); }
+.meter h3, .meter dd { color: var(--ink); }
+.meter-value { color: var(--mat); font: 700 2.7rem/1.1 var(--serif); }
+.meter-warn { color: var(--red); }
+.about-text { font: 400 1.04rem/1.9 var(--sans); }
+.about-sec { margin-top: 30px; }
+.about-sec h2 { padding-bottom: 5px; border-bottom: 1px solid var(--rule); font: 700 1.4rem/1.4 var(--serif); }
+.refs { border-top: 1px solid var(--rule); margin-top: 0; }
+.formula { font: 700 clamp(1.5rem, 3vw, 2rem)/1.3 var(--serif); }
+.formula-w { font-family: var(--serif); }
+.cautions li { border-left-color: var(--rule); }
+footer { background: none; color: var(--soft); padding: 0 0 28px; font-size: .88rem; }
+footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
+
+@media (max-width: 1100px) {
+  .front-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 860px) {
+  .head-in { flex-wrap: wrap; gap: 8px 12px; padding: 8px 14px; }
+  .site-head { position: static; }
+  .head-search { order: 3; flex: 0 0 100%; min-width: 0; max-width: none; }
+  .head-search input { width: 0; }
+  .shell { grid-template-columns: minmax(0, 1fr); padding: 0 12px 24px; }
+  .side { position: static; display: flex; gap: 14px; overflow-x: auto; margin: 0 -12px 12px; padding: 7px 12px; background: var(--paper); border-bottom: 1px solid var(--rule); scrollbar-width: none; }
+  .side h2, .side .only-wide { display: none; }
+  .side ul { display: flex; gap: 14px; }
+  .side a { margin: 0; padding: 2px 0; white-space: nowrap; }
+  .side a[aria-current="page"] { background: none; }
+  .infobox { float: none; width: auto; margin: 0 0 14px; }
+  .verify { grid-template-columns: minmax(0, 1fr); }
+  .front-intro { grid-template-columns: minmax(0, 1fr); }
+  .meter { top: 0; }
+}
+@media (max-width: 680px) {
+  .brand-name small { display: none; }
+  .doc-tabs a, .doc-tabs button { padding: 5px 10px; font-size: .9rem; }
+  .toc { display: block; }
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<nav class="topbar" aria-label="주요 메뉴">
-  <div class="wrap">
-    <a class="brand" href="#top">CRAFT</a>
-    <ul>
-      <li><a href="#stages">네 단계</a></li>
-      <li><a href="#practice">실습</a></li>
-      <li><a href="#measure">측정</a></li>
-      <li><a href="#wiki">템플릿</a></li>
-      <li><a href="#basis">근거</a></li>
-    </ul>
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">C</span><span class="brand-name">CRAFT 분석 위키</span></a>
+    <form class="head-search" id="wiki-search" role="search">
+      <label class="sr-only" for="wiki-q">분석글 검색</label>
+      <input type="search" id="wiki-q" placeholder="논문 제목, 교수 이름, 주제 검색" autocomplete="off">
+      <button type="submit">검색</button>
+    </form>
     <div class="account" id="account" hidden></div>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="side" aria-label="사이트 메뉴">
+  <div>
+    <h2>둘러보기</h2>
+    <ul>
+      <li><a href="#/" data-nav="wiki">대문</a></li>
+      <li><a href="#/all" data-nav="all">모든 분석글</a></li>
+      <li><a href="#/random">임의 문서</a></li>
+    </ul>
+  </div>
+  <div>
+    <h2>참여하기</h2>
+    <ul>
+      <li><a href="#/new" data-nav="new">분석글 쓰기</a></li>
+      <li><a href="#/practice" data-nav="practice">분해 실습</a></li>
+    </ul>
+  </div>
+  <div>
+    <h2>안내</h2>
+    <ul>
+      <li><a href="#/about" data-nav="about">프로젝트 소개</a></li>
+    </ul>
   </div>
 </nav>
 
-<header class="mat hero" id="top">
-  <div class="wrap hero-grid">
-    <div>
-      <h1>공학 글을<br>분해해서<br>읽는다</h1>
-      <p class="hero-lead">요약으로는 보이지 않는 수식의 전개, 논리의 빈틈, 기술 뒤의 의도를 네 단계로 찾아내고 비평문의 뼈대까지 만드는 독서와 작문 프레임워크입니다.</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#practice" data-load-sample>예시 글로 실습하기</a>
-        <a class="btn ghost" href="#practice">내 글로 시작하기</a>
+<main id="main">
+
+<div class="view" id="view-wiki">
+  <div class="paper">
+    <h1 class="page-title" id="list-title">대문</h1>
+    <div class="front-intro" id="front-intro">
+      <div>
+        <h2>공학 글을 분해한 기록을 모으는 위키</h2>
+        <p>논문과 책을 네 단계로 분석한 글을 찾아 읽고, 직접 올리고, 함께 고칩니다.</p>
       </div>
+      <a class="btn" href="#/new">분석글 쓰기</a>
+      <p class="wiki-stats" id="wiki-stats"></p>
     </div>
-    <figure class="sheet" id="lens" data-lens="1" style="margin:0">
+    <div class="front-grid" id="front-grid">
+      <section aria-label="분석글 목록">
+        <div class="wiki-bar">
+          <div class="type-filter" id="type-filter" role="group" aria-label="글 종류">
+            <button type="button" data-type="" aria-pressed="true">전체</button>
+            <button type="button" data-type="논문" aria-pressed="false">논문</button>
+            <button type="button" data-type="서적" aria-pressed="false">서적</button>
+            <button type="button" data-type="기술 문서" aria-pressed="false">기술 문서</button>
+            <button type="button" data-type="기타" aria-pressed="false">기타</button>
+          </div>
+          <label class="check"><input type="checkbox" id="only-measured"> 측정 첨부만</label>
+        </div>
+        <h2 class="box-title" id="list-heading">최근 바뀐 분석글</h2>
+        <div class="results" id="wiki-results" aria-live="polite"></div>
+        <button class="btn small line more" type="button" id="wiki-more" hidden>더 보기</button>
+      </section>
+      <aside class="front-side" id="front-side" aria-label="분류와 안내">
+        <h2 class="box-title">분야별 분류</h2>
+        <div class="box-body"><ul class="cat-list" id="cat-list"></ul></div>
+        <h2 class="box-title">검증 표시 안내</h2>
+        <div class="box-body">
+          <ul class="legend-list">
+            <li><span class="badge measure">측정</span> 작성자가 CRAFT 적용 전후 밀도를 첨부한 글</li>
+            <li><span class="badge peer">동료 확인</span> 다른 사용자가 원문과 대조한 글</li>
+          </ul>
+          <a href="#/about">측정 기준 보기</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="view" id="view-article" hidden>
+  <section class="block"><div class="wrap" id="article-host"></div></section>
+</div>
+
+<div class="view" id="view-editor" hidden>
+  <section class="block"><div class="wrap" id="editor-host"></div></section>
+</div>
+
+<div class="view" id="view-practice" hidden>
+  <h1 class="prac-h1">분해 실습</h1>
+  <p class="prac-lead">같은 글을 네 단계로 바꿔 보면서 읽는 법을 익히고, 예시 글이나 내 글을 직접 분해해 보세요. 끝낸 분석은 위키에 올릴 수 있습니다.</p>
+  <div class="hero-actions">
+    <a class="btn primary" href="#practice-tool" data-load-sample>예시 글로 실습하기</a>
+    <a class="btn ghost" href="#practice-tool" data-new-text>내 글로 시작하기</a>
+  </div>
+  <figure class="sheet" id="lens" data-lens="1" style="margin:0">
       <div class="lens-tabs" role="group" aria-label="네 단계로 글 보기">
         <button type="button" data-lens-btn="1" aria-pressed="true">1 입수</button>
         <button type="button" data-lens-btn="2" aria-pressed="false">2 메커니즘</button>
@@ -518,11 +764,6 @@ input[type="email"], input[type="password"] {
         <figcaption class="lens-note" id="lens-note" aria-live="polite"></figcaption>
       </div>
     </figure>
-  </div>
-</header>
-
-<main id="main">
-
 <section class="block" aria-labelledby="why-title">
   <div class="wrap">
     <h2 id="why-title">요약하면 사라지는 것</h2>
@@ -546,7 +787,7 @@ input[type="email"], input[type="password"] {
   </div>
 </section>
 
-<section class="block" id="stages" aria-labelledby="stages-title" style="padding-top:0">
+<section class="block" id="stages" aria-labelledby="stages-title">
   <div class="wrap">
     <h2 id="stages-title">네 단계로 읽기</h2>
     <p class="lead">앞 단계의 결과물이 다음 단계의 재료가 됩니다. 순서대로 진행하세요.</p>
@@ -580,15 +821,15 @@ input[type="email"], input[type="password"] {
   </div>
 </section>
 
-<section class="mat" id="practice" aria-labelledby="practice-title">
+<section class="mat" id="practice-tool" aria-labelledby="practice-title">
   <div class="wrap">
     <h2 id="practice-title">글 한 편 분해하기</h2>
     <p class="lead">글을 붙여 넣고 네 단계를 따라가면 비평문 뼈대가 만들어집니다. <span id="practice-store">입력한 내용은 이 브라우저에만 저장됩니다.</span></p>
     <div class="wb-tools">
       <button class="btn small primary" type="button" data-load-sample>예시 글 불러오기</button>
       <button class="btn small ghost" type="button" id="wb-reset">새로 시작</button>
-      <button class="btn small ghost" type="button" id="cloud-save" hidden>클라우드에 저장</button>
-      <button class="btn small ghost" type="button" id="cloud-notes" hidden>내 노트</button>
+      <button class="btn small ghost" type="button" id="cloud-save" hidden>초안 저장</button>
+      <button class="btn small ghost" type="button" id="cloud-notes" hidden>내 초안</button>
       <span class="wb-saved" id="wb-saved" aria-live="polite"></span>
     </div>
     <div class="wb-layout">
@@ -612,16 +853,36 @@ input[type="email"], input[type="password"] {
   </div>
 </section>
 
-<section class="block" id="measure" aria-labelledby="measure-title">
-  <div class="wrap">
-    <h2 id="measure-title">효과 측정하기</h2>
-    <p class="lead">프레임워크가 구호에 그치지 않으려면 적용 전과 후를 숫자로 비교해야 합니다. 텍스트 구조화 밀도는 글의 무게에 비해 인과관계를 얼마나 찾아냈는지 나타냅니다.</p>
-    <div class="measure-grid">
-      <div>
-        <p class="formula">밀도 D = C ÷ W</p>
+</div>
+
+<div class="view" id="view-about" hidden>
+  <section class="block about">
+    <div class="wrap">
+      <h1>프로젝트 소개</h1>
+      <h2 class="sr-only">왜 만들었나요</h2>
+      <p class="about-text">요약 위주로 읽으면 수식이 전개되는 과정이나 논리의 허점을 놓치기 쉽습니다. 1학년 때 다룬 다크패턴과 알고리즘 문제처럼 기술 뒤에 숨은 의도까지 살피려면 공학 글에 맞는 읽기와 쓰기 방법이 필요했습니다.</p>
+
+      <div class="about-sec">
+        <h2>무엇을 하려고 하나요</h2>
+        <p class="about-text">CRAFT(Critical Reading, Analysis &amp; Formal Text)는 정보 입수, 논리 메커니즘 추출, 비판적 결함 포착, 공학적 대안 재구성의 네 단계로 글을 분해하는 방법입니다. 이 위키는 그렇게 분석한 기록을 한곳에 모아, 다른 사람이 같은 논문이나 주제를 찾아보고 함께 고칠 수 있게 합니다.</p>
+      </div>
+
+      <div class="about-sec">
+        <h2>바탕이 된 자료</h2>
+        <ul class="refs">
+          <li><div><b>『독서의 기술』</b><small>모티머 J. 애들러</small></div><p>독서 수준을 기초, 점검, 분석, 주제 통합으로 나눕니다. 글의 구조를 파악하고 해석한 뒤 비평하는 분석적 읽기가 CRAFT 1~3단계의 바탕입니다.</p></li>
+          <li><div><b>독자반응이론</b><small>볼프강 이저</small></div><p>의미는 독자가 글의 빈틈을 채우며 만들어진다고 봅니다. 글이 말하지 않은 가정과 빠진 데이터를 찾는 3단계의 관점으로 응용했습니다.</p></li>
+          <li><div><b>『어떻게 읽을 것인가』</b><small>고영성</small></div><p>읽는 방법 자체를 돌아보게 하는 참고 도서입니다.</p></li>
+        </ul>
+      </div>
+
+      <div class="about-sec" id="measure">
+        <h2>분석글의 측정 표시</h2>
+        <p class="about-text">글을 쓴 사람은 CRAFT 적용 전과 후의 텍스트 구조화 밀도를 첨부할 수 있습니다. 측정값은 작성자가 직접 입력한 값이고, 다른 사용자가 원문과 대조해 확인하면 동료 확인 수가 함께 표시됩니다.</p>
+        <p class="formula" style="margin-top:20px">밀도 D = C ÷ W</p>
         <p class="formula-w">W = 핵심 × 3 + 근거 × 2 + 배경 × 1</p>
         <ul class="defs">
-          <li><b>C</b> 읽은 사람이 찾아낸 핵심 키워드 사이의 유효한 인과 연결 수</li>
+          <li><b>C</b> 핵심 키워드 사이의 유효한 인과 연결 수</li>
           <li><b>W</b> 원문 문장에 역할별 가중치를 곱해 더한 값</li>
         </ul>
         <div class="cautions">
@@ -629,101 +890,20 @@ input[type="email"], input[type="password"] {
           <ul>
             <li>같은 글을 두 번 읽으면 두 번째 점수가 저절로 오릅니다. 사전과 사후에는 난이도가 비슷한 다른 글을 쓰세요.</li>
             <li>연결을 많이 적기만 해도 점수가 오릅니다. 다른 사람이 인정한 연결만 C에 넣으세요.</li>
-            <li>문장 역할도 사람마다 다르게 고를 수 있습니다. 두 명이 따로 분류해 일치율을 확인하세요.</li>
-            <li>가중치 3, 2, 1은 프로토타입의 임시 기준입니다. 시험 적용 뒤 조정할 수 있습니다.</li>
+            <li>가중치 3, 2, 1은 프로토타입의 임시 기준입니다.</li>
           </ul>
         </div>
       </div>
-      <div class="calc">
-        <h3 style="margin-bottom:12px">사전·사후 계산기</h3>
-        <table>
-          <thead><tr><th scope="col">항목</th><th scope="col">적용 전</th><th scope="col">적용 후</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">핵심 문장 수</th><td><input type="number" min="0" inputmode="numeric" data-m="pre.core" aria-label="적용 전 핵심 문장 수"></td><td><input type="number" min="0" inputmode="numeric" data-m="post.core" aria-label="적용 후 핵심 문장 수"></td></tr>
-            <tr><th scope="row">근거 문장 수</th><td><input type="number" min="0" inputmode="numeric" data-m="pre.ev" aria-label="적용 전 근거 문장 수"></td><td><input type="number" min="0" inputmode="numeric" data-m="post.ev" aria-label="적용 후 근거 문장 수"></td></tr>
-            <tr><th scope="row">배경 문장 수</th><td><input type="number" min="0" inputmode="numeric" data-m="pre.bg" aria-label="적용 전 배경 문장 수"></td><td><input type="number" min="0" inputmode="numeric" data-m="post.bg" aria-label="적용 후 배경 문장 수"></td></tr>
-            <tr><th scope="row">유효 인과 연결 수</th><td><input type="number" min="0" inputmode="numeric" data-m="pre.c" aria-label="적용 전 유효 인과 연결 수"></td><td><input type="number" min="0" inputmode="numeric" data-m="post.c" aria-label="적용 후 유효 인과 연결 수"></td></tr>
-          </tbody>
-          <tfoot><tr><th scope="row">밀도 D</th><td id="d-pre">–</td><td id="d-post">–</td></tr></tfoot>
-        </table>
-        <div class="bars" aria-hidden="true">
-          <div class="bar-row"><span>전</span><div class="bar-track"><div class="bar-fill" id="bar-pre"></div></div><b id="bar-pre-v">–</b></div>
-          <div class="bar-row post"><span>후</span><div class="bar-track"><div class="bar-fill" id="bar-post"></div></div><b id="bar-post-v">–</b></div>
-        </div>
-        <p class="calc-result" id="d-result" aria-live="polite">적용 전과 후의 값을 모두 입력하면 변화를 보여 줍니다.</p>
-        <div class="calc-actions"><button class="btn small line" type="button" id="m-import">실습 결과를 적용 후 칸에 넣기</button> <button class="btn small" type="button" id="m-save" hidden>측정 결과 저장</button></div>
-        <div class="class-stats" id="class-stats" hidden>
-          <h4>학급 평균</h4>
-          <p id="class-stats-text"></p>
-        </div>
-      </div>
     </div>
-  </div>
-</section>
-
-<section class="block" id="wiki" aria-labelledby="wiki-title" style="padding-top:0">
-  <div class="wrap">
-    <h2 id="wiki-title">바로 쓰는 템플릿</h2>
-    <p class="lead">글의 종류에 맞는 틀을 복사해 노트 앱이나 문서에 붙여 넣으세요.</p>
-    <div class="wiki">
-      <div class="wiki-list" id="wiki-list" role="group" aria-label="템플릿 목록"></div>
-      <div class="wiki-doc">
-        <div class="wiki-head">
-          <h3 id="wiki-doc-title"></h3>
-          <div class="acts">
-            <button class="link-btn" type="button" id="wiki-del" hidden>내 제출 삭제</button>
-            <button class="btn small" type="button" id="wiki-copy">템플릿 복사</button>
-          </div>
-        </div>
-        <p class="wiki-meta" id="wiki-meta"></p>
-        <pre id="wiki-doc-body" tabindex="0"></pre>
-        <p class="wiki-contrib" id="wiki-contrib" hidden></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="basis" aria-labelledby="basis-title" style="padding-top:0">
-  <div class="wrap">
-    <h2 id="basis-title">이론적 근거</h2>
-    <p class="lead">두 도서는 내용을 소개하기 위한 주도서가 아니라, CRAFT의 목적과 의의를 뒷받침하는 부도서로 활용합니다.</p>
-    <table class="basis">
-      <thead><tr><th scope="col">자료</th><th scope="col">핵심 내용</th><th scope="col">CRAFT에 쓰이는 곳</th></tr></thead>
-      <tbody>
-        <tr>
-          <th scope="row">『독서의 기술』<small>모티머 J. 애들러</small></th>
-          <td>독서 수준을 기초, 점검, 분석, 주제 통합의 네 단계로 나눕니다. 분석적 읽기에서는 글의 구조를 파악하고, 해석하고, 비평합니다.</td>
-          <td>1~3단계의 뼈대입니다. 주제 통합 수준은 6-2 소단원의 주제 통합적 읽기와 이어집니다. 4단계 대안 재구성은 공학 글에 맞춰 새로 더한 단계입니다.</td>
-        </tr>
-        <tr>
-          <th scope="row">독자반응이론<small>볼프강 이저</small></th>
-          <td>텍스트의 의미는 독자가 글의 빈틈을 채우는 과정에서 만들어집니다.</td>
-          <td>3단계에서 글이 말하지 않은 가정과 빠진 데이터를 찾는 관점입니다. 문학 이론을 공학 글에 응용한 것입니다.</td>
-        </tr>
-        <tr>
-          <th scope="row">『어떻게 읽을 것인가』<small>고영성</small></th>
-          <td>읽는 방법 자체를 돌아보게 하는 부도서입니다.</td>
-          <td>발표에서 읽기 방법을 바꿔야 하는 이유를 뒷받침합니다.</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="road">
-      <h3>프로젝트 진행 순서</h3>
-      <ol>
-        <li>독서 방법론을 네 단계 프레임워크로 규격화</li>
-        <li>해외 공학 저널 아티클을 해체해 융합 공학 비평문 작성</li>
-        <li>6-2 소단원과 연계해 7분 발표</li>
-        <li class="ext">공학·인문 융합 논문 해석용 템플릿 Wiki를 교내에 공유</li>
-      </ol>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
 </main>
+</div>
 
 <footer>
   <div class="wrap">
-    <p id="foot-note">CRAFT 프로토타입. 입력한 글과 노트는 서버로 전송되지 않고 이 브라우저에만 저장됩니다.</p>
+    <p id="foot-note">CRAFT 분석 위키 프로토타입</p>
   </div>
 </footer>
 
@@ -741,8 +921,13 @@ input[type="email"], input[type="password"] {
   </form>
 </dialog>
 
+<dialog class="wide" id="history-dialog" aria-labelledby="history-title">
+  <div class="dialog-head"><h3 id="history-title">수정 기록</h3><button class="link-btn" type="button" data-close>닫기</button></div>
+  <div id="history-list"></div>
+</dialog>
+
 <dialog class="wide" id="notes-dialog" aria-labelledby="notes-title">
-  <div class="dialog-head"><h3 id="notes-title">내 노트</h3><button class="link-btn" type="button" data-close>닫기</button></div>
+  <div class="dialog-head"><h3 id="notes-title">내 초안</h3><button class="link-btn" type="button" data-close>닫기</button></div>
   <div id="notes-list"></div>
   <p class="form-msg" id="notes-msg" role="alert"></p>
 </dialog>
@@ -751,18 +936,17 @@ input[type="email"], input[type="password"] {
 <noscript><p style="padding:12px 20px;background:#FFE45C;color:#132B27">실습 도구와 계산기를 쓰려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
 <script>
 (function () {
   'use strict';
 
-  /* GitHub 저장소 주소를 넣으면 템플릿 영역에 기여 링크가 나타납니다.
-     예: 'https://github.com/사용자이름/craft' */
   var CONFIG = {
-    repoUrl: '',
     /* Supabase 값을 넣으면 로그인, 클라우드 저장, 학급 Wiki가 켜집니다.
        공개용 키(Publishable 또는 anon)만 넣으세요. secret, service_role 키는 절대 넣지 마세요. */
-    supabaseUrl: 'https://lcydaaznngueiubgzktr.supabase.co',
-    supabaseKey: 'sb_publishable_UWAPOsE0E6EE_DDk64I5zg_sZEqH7W6'
+    supabaseUrl: '',
+    supabaseKey: ''
   };
 
   var STORE_KEY = 'craft-workbench-v1';
@@ -822,7 +1006,37 @@ input[type="email"], input[type="password"] {
       body: '# [비평문 제목]\n\n## 서론\n- 다룰 글과 기술:\n- 이 글을 고른 이유:\n- 나의 논지 한 문장:\n\n## 본론 1. 메커니즘 정리\n- 저자의 핵심 주장:\n- 주장을 지탱하는 인과 사슬:\n\n## 본론 2. 기술적 타당성 비평\n- 결함:\n- 글에서 찾은 증거:\n- 이 결함이 결론에 주는 영향:\n\n## 본론 3. 윤리적 한계 비평\n- 영향을 받는 사람:\n- 드러나지 않은 비용:\n\n## 본론 4. 공학적 대안\n- 제안:\n- 검증 방법:\n- 대안의 한계:\n\n## 결론\n- 논지 다시 쓰기:\n- 읽기 전과 달라진 판단:\n- 남은 질문:\n\n## 참고 자료\n- 저자, 제목, 연도, URL' }
   ];
 
-  var CLOUD = { sb: null, user: null, wiki: [] };
+  var CLOUD = { sb: null, user: null, ready: false };
+
+  /* 글에서 고른 낱말을 입력 칸에 넣기 */
+  var pickSlot = 'from', pickTimer;
+  function setPickSlot(slot) {
+    pickSlot = slot;
+    var a = $('lk-from'), b = $('lk-to');
+    if (!a || !b) return;
+    a.parentNode.classList.toggle('active', slot === 'from');
+    b.parentNode.classList.toggle('active', slot === 'to');
+  }
+  function setRef(id) {
+    var sel = $('lk-s') || $('fl-s');
+    if (sel) sel.value = id;
+    document.querySelectorAll('#ref-list li').forEach(function (li) {
+      li.classList.toggle('on', li.dataset.s === id);
+    });
+  }
+  function pickSelection() {
+    var box = $('ref-list'), sel = window.getSelection();
+    if (!box || !sel || sel.isCollapsed || !sel.anchorNode) return;
+    var node = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentNode;
+    var li = node.closest && node.closest('#ref-list li');
+    var text = sel.toString().replace(/\s+/g, ' ').trim().slice(0, 40);
+    if (!li || !text) return;
+    setRef(li.dataset.s);
+    if (!$('lk-from')) return;
+    $(pickSlot === 'from' ? 'lk-from' : 'lk-to').value = text;
+    setPickSlot(pickSlot === 'from' ? 'to' : 'from');
+    sel.removeAllRanges();
+  }
 
   /* 공통 도구 */
   function $(id) { return document.getElementById(id); }
@@ -865,6 +1079,7 @@ input[type="email"], input[type="password"] {
     return {
       step: 0,
       cloudId: null,
+      sample: false,
       meta: { title: '', source: '', question: '' },
       text: '',
       sentences: [],
@@ -920,6 +1135,7 @@ input[type="email"], input[type="password"] {
       return flaw;
     });
     state.reflect = Object.assign({}, SAMPLE.reflect);
+    state.sample = true;
     save();
     render();
     toast('예시 글을 불러왔습니다. 연습용 가상 지문입니다.');
@@ -1001,8 +1217,15 @@ input[type="email"], input[type="password"] {
       '</div>' +
       '<label class="field"><span>이 글에서 확인하고 싶은 질문</span><input type="text" data-bind="meta.question" value="' + esc(state.meta.question) + '"></label>' +
       '<label class="field"><span>분석할 글</span><textarea class="tall" id="wb-text" data-bind="text" placeholder="기술 문서나 논문의 한 단락을 붙여 넣으세요.">' + esc(state.text) + '</textarea></label>' +
-      '<button class="btn small" type="button" data-act="split">문장 나누기</button>' +
+      '<div class="row-tools"><button class="btn small" type="button" data-act="split">문장 나누기</button>' +
+      (state.sentences.length ? '<button class="btn small line" type="button" data-act="suggest">역할 자동 제안</button>' : '') + '</div>' +
       list + navHtml(0);
+  }
+
+  function refList(help) {
+    return '<p class="hint">' + help + '</p><ol class="ref-list" id="ref-list">' + state.sentences.map(function (s, i) {
+      return '<li data-s="' + s.id + '" class="w' + (s.w || 0) + '"><span class="n">' + (i + 1) + '</span><span>' + esc(s.t) + '</span></li>';
+    }).join('') + '</ol>';
   }
 
   function viewMechanism() {
@@ -1017,8 +1240,9 @@ input[type="email"], input[type="password"] {
         '<button class="remove" type="button" data-act="del-link" data-id="' + l.id + '">삭제</button></li>';
     }).join('');
     return '<h3>논리 메커니즘 추출</h3><p class="panel-guide">핵심 키워드를 원인과 결과로 잇습니다. 같은 키워드를 다시 쓰면 지도에서 하나로 합쳐집니다.</p>' +
+      refList('아래 문장에서 낱말을 드래그하면 원인 칸과 결과 칸에 차례로 들어가고, 근거 문장도 함께 선택됩니다.') +
       '<form class="add-form" data-form="link">' +
-      '<label class="field"><span>원인</span><input type="text" id="lk-from" list="kw-list" required></label>' +
+      '<label class="field active"><span>원인</span><input type="text" id="lk-from" list="kw-list" required></label>' +
       '<label class="field"><span>결과</span><input type="text" id="lk-to" list="kw-list" required></label>' +
       '<label class="field"><span>근거 문장</span><select id="lk-s">' + sentenceOptions('') + '</select></label>' +
       '<label class="field"><span>근거 상태</span><select id="lk-ok"><option value="1">글에 근거 있음</option><option value="0">근거 부족</option></select></label>' +
@@ -1053,6 +1277,7 @@ input[type="email"], input[type="password"] {
     return '<h3>비판적 결함 포착</h3><p class="panel-guide">기술적 타당성과 윤리적 한계를 모두 살펴보세요. 글이 증명하지 않은 부분이 결함 후보입니다.</p>' +
       weakHtml +
       '<h4 class="subhead">결함 추가</h4>' +
+      refList('문장을 누르면 관련 문장으로 선택됩니다.') +
       '<form class="add-form flaw" data-form="flaw">' +
       '<label class="field"><span>유형</span><select id="fl-kind">' + options + '</select></label>' +
       '<label class="field"><span>관련 문장</span><select id="fl-s">' + sentenceOptions('') + '</select></label>' +
@@ -1082,17 +1307,9 @@ input[type="email"], input[type="password"] {
     if (!hasWork()) return emptyView('글을 분석하면 비평문 뼈대가 여기에 만들어집니다.', 0, '정보 입수로 이동');
     return '<h3>비평문 뼈대</h3><p class="panel-guide">네 단계의 메모를 비평문 순서로 모았습니다. 완성된 글이 아니므로 이 뼈대를 바탕으로 직접 문단을 쓰세요.</p>' +
       '<div class="export"><button class="btn small" type="button" data-act="copy-md">Markdown 복사</button>' +
-      '<button class="btn small line" type="button" data-act="save-md">.md 파일 내려받기</button></div>' +
-      '<pre class="preview" tabindex="0">' + esc(buildMarkdown()) + '</pre>' + submitHtml() + navHtml(4);
-  }
-
-  function submitHtml() {
-    if (!CLOUD.sb) return '';
-    var options = TEMPLATES.map(function (t) { return '<option>' + esc(t.name) + '</option>'; }).join('');
-    return '<div class="submit-box"><h4 class="subhead">학급 Wiki에 제출</h4>' +
-      '<p class="hint">위 내용이 그대로 제출되며, 관리자가 승인하면 표시 이름과 함께 공개됩니다. 논문 원문을 길게 옮긴 부분은 제출 전에 빼 주세요.</p>' +
-      '<label class="field" style="margin-top:10px"><span>분류</span><select id="wiki-category">' + options + '</select></label>' +
-      '<button class="btn small" type="button" data-act="wiki-submit">Wiki에 제출</button></div>';
+      '<button class="btn small line" type="button" data-act="save-md">.md 파일 내려받기</button>' +
+      '<button class="btn small" type="button" data-act="to-wiki">위키에 올리기</button></div>' +
+      '<pre class="preview" tabindex="0">' + esc(buildMarkdown()) + '</pre>' + navHtml(4);
   }
 
   function emptyView(msg, step, label) {
@@ -1200,8 +1417,9 @@ input[type="email"], input[type="password"] {
 
   /* 화면 갱신 */
   function renderTabs() {
+    var counts = [state.sentences.length, state.links.length, state.flaws.length, state.flaws.filter(function (f) { return (f.fix || '').trim(); }).length, 0];
     $('wb-tabs').innerHTML = STEPS.map(function (label, i) {
-      return '<button type="button" data-tab="' + i + '"' + (i === state.step ? ' aria-current="step"' : '') + '>' + label + '</button>';
+      return '<button type="button" data-tab="' + i + '"' + (i === state.step ? ' aria-current="step"' : '') + '>' + label + (counts[i] ? ' (' + counts[i] + ')' : '') + '</button>';
     }).join('');
   }
 
@@ -1225,6 +1443,10 @@ input[type="email"], input[type="password"] {
   }
 
   function goTo(step) {
+    if (state.step === 0 && step !== 0 && textChanged()) {
+      var parts = splitSentences(state.text);
+      applyText(parts);
+    }
     state.step = step;
     save();
     render();
@@ -1251,21 +1473,54 @@ input[type="email"], input[type="password"] {
     updateMeter();
   }
 
-  function splitText() {
-    var parts = splitSentences(state.text);
-    if (!parts.length) { toast('먼저 분석할 글을 붙여 넣으세요.'); $('wb-text').focus(); return; }
-    var pool = state.sentences.slice();
+  function norm(t) { return String(t).replace(/\s+/g, ''); }
+  function textChanged() {
+    return norm(state.text) !== norm(state.sentences.map(function (s) { return s.t; }).join(''));
+  }
+  /* 글이 바뀌면 사라진 문장에 연결된 분석을 함께 지워 예전 내용이 남지 않게 합니다. */
+  function applyText(parts) {
+    var pool = state.sentences.slice(), kept = 0;
     state.sentences = parts.map(function (t) {
       for (var i = 0; i < pool.length; i++) {
-        if (pool[i].t === t) return pool.splice(i, 1)[0];
+        if (pool[i].t === t) { kept += 1; return pool.splice(i, 1)[0]; }
       }
       return { id: uid(), t: t, w: 0 };
     });
     var alive = state.sentences.map(function (s) { return s.id; });
-    state.links.concat(state.flaws).forEach(function (x) { if (alive.indexOf(x.s) < 0) x.s = ''; });
+    if (!kept) {
+      state.links = [];
+      state.flaws = [];
+      state.reflect = { changed: '', unknown: '' };
+      if (state.sample) { state.meta = { title: '', source: '', question: '' }; }
+      state.sample = false;
+      state.cloudId = null;
+    } else {
+      var live = function (x) { return !x.s || alive.indexOf(x.s) > -1; };
+      state.links = state.links.filter(live);
+      state.flaws = state.flaws.filter(live);
+    }
+    return kept;
+  }
+  function splitText() {
+    var parts = splitSentences(state.text);
+    if (!parts.length) { toast('먼저 분석할 글을 붙여 넣으세요.'); $('wb-text').focus(); return; }
+    var kept = state.sentences.length ? applyText(parts) : (applyText(parts), 0);
     save();
     render();
-    toast('문장 ' + parts.length + '개로 나누었습니다.');
+    toast('문장 ' + parts.length + '개로 나누었습니다.' + (kept ? '' : ' 다음 단계는 새 글 기준으로 비워졌습니다.'));
+  }
+  function suggestRoles() {
+    var changed = 0;
+    state.sentences.forEach(function (s) {
+      if (s.w) return;
+      if (/따라서|그러므로|결론|제안한다|주장|이처럼|즉,/.test(s.t)) s.w = 3;
+      else if (/\d|실험|측정|조사|결과|데이터/.test(s.t)) s.w = 2;
+      else s.w = 1;
+      changed += 1;
+    });
+    save();
+    render();
+    toast(changed ? '문장 ' + changed + '개의 역할을 제안했습니다. 맞는지 확인하세요.' : '이미 모든 문장의 역할을 정했습니다.');
   }
 
   function mergeSentence(id) {
@@ -1313,6 +1568,21 @@ input[type="email"], input[type="password"] {
   });
 
   var panelEl = $('wb-panel');
+  panelEl.addEventListener('mouseup', function () { setTimeout(pickSelection, 0); });
+  panelEl.addEventListener('focusin', function (e) {
+    if (e.target.id === 'lk-from') setPickSlot('from');
+    if (e.target.id === 'lk-to') setPickSlot('to');
+  });
+  panelEl.addEventListener('click', function (e) {
+    var li = e.target.closest('#ref-list li');
+    if (li && window.getSelection().isCollapsed) setRef(li.dataset.s);
+  });
+  if ('ontouchstart' in window) {
+    document.addEventListener('selectionchange', function () {
+      clearTimeout(pickTimer);
+      pickTimer = setTimeout(pickSelection, 600);
+    });
+  }
   panelEl.addEventListener('input', function (e) {
     var path = e.target.dataset.bind;
     if (path) setBound(path, e.target.value);
@@ -1323,6 +1593,7 @@ input[type="email"], input[type="password"] {
     var act = b.dataset.act, id = b.dataset.id;
     if (act === 'go') goTo(+b.dataset.step);
     else if (act === 'split') splitText();
+    else if (act === 'suggest') suggestRoles();
     else if (act === 'role') setRole(b);
     else if (act === 'merge') mergeSentence(id);
     else if (act === 'del-link') {
@@ -1339,7 +1610,7 @@ input[type="email"], input[type="password"] {
       toast('결함 목록에 옮겼습니다. 4단계에서 대안을 적으세요.');
     } else if (act === 'copy-md') copyText(buildMarkdown(), 'Markdown을 복사했습니다.');
     else if (act === 'save-md') saveMarkdown();
-    else if (act === 'wiki-submit') submitWiki(b);
+    else if (act === 'to-wiki') toWiki();
   });
   panelEl.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -1350,6 +1621,7 @@ input[type="email"], input[type="password"] {
       if (from === to) { toast('원인과 결과는 서로 다른 키워드여야 합니다.'); return; }
       state.links.push({ id: uid(), from: from, to: to, s: $('lk-s').value, ok: $('lk-ok').value === '1' });
       save(); render();
+      setPickSlot('from');
       $('lk-from').focus();
     } else if (form === 'flaw') {
       var note = $('fl-note').value.trim();
@@ -1370,6 +1642,17 @@ input[type="email"], input[type="password"] {
     toast('실습 내용을 지웠습니다.');
   });
 
+  document.querySelectorAll('[data-new-text]').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      if (state.sample || !hasWork()) {
+        state = blank();
+        save();
+        render();
+      }
+      e.preventDefault();
+      $('practice-tool').scrollIntoView();
+    });
+  });
   document.querySelectorAll('[data-load-sample]').forEach(function (el) {
     el.addEventListener('click', function (e) {
       if (hasWork() && !window.confirm('예시 글을 불러오면 지금 실습 내용이 지워집니다. 계속할까요?')) {
@@ -1377,105 +1660,13 @@ input[type="email"], input[type="password"] {
         return;
       }
       loadSample();
+      if (el.tagName === 'A') { e.preventDefault(); $('practice-tool').scrollIntoView(); }
     });
   });
 
-  /* 사전·사후 계산기 */
   function density(g) {
     var w = (+g.core || 0) * 3 + (+g.ev || 0) * 2 + (+g.bg || 0);
     return w ? (+g.c || 0) / w : null;
-  }
-  function renderMeasure() {
-    var pre = density(state.measure.pre), post = density(state.measure.post);
-    function fmt(v) { return v === null ? '–' : v.toFixed(2); }
-    $('d-pre').textContent = fmt(pre);
-    $('d-post').textContent = fmt(post);
-    $('bar-pre-v').textContent = fmt(pre);
-    $('bar-post-v').textContent = fmt(post);
-    var max = Math.max(pre || 0, post || 0) || 1;
-    $('bar-pre').style.width = ((pre || 0) / max * 100) + '%';
-    $('bar-post').style.width = ((post || 0) / max * 100) + '%';
-    var out = $('d-result');
-    if (pre === null || post === null) { out.textContent = '적용 전과 후의 값을 모두 입력하면 변화를 보여 줍니다.'; return; }
-    var diff = post - pre;
-    if (Math.abs(diff) < .005) { out.textContent = '적용 전과 후의 밀도가 같습니다.'; return; }
-    out.textContent = '밀도가 ' + Math.abs(diff).toFixed(2) + ' ' + (diff > 0 ? '높아졌습니다' : '낮아졌습니다') +
-      (pre > 0 ? ' (' + (diff > 0 ? '+' : '−') + Math.abs(diff / pre * 100).toFixed(0) + '%).' : '.');
-  }
-  function fillMeasure() {
-    document.querySelectorAll('[data-m]').forEach(function (el) {
-      var p = el.dataset.m.split('.');
-      el.value = state.measure[p[0]][p[1]] == null ? '' : state.measure[p[0]][p[1]];
-    });
-    renderMeasure();
-  }
-  $('measure').addEventListener('input', function (e) {
-    var key = e.target.dataset.m;
-    if (!key) return;
-    var p = key.split('.');
-    var v = e.target.value === '' ? null : Math.max(0, +e.target.value);
-    state.measure[p[0]][p[1]] = v;
-    save();
-    renderMeasure();
-  });
-  $('m-import').addEventListener('click', function () {
-    if (!state.sentences.length) { toast('먼저 실습에서 글을 분석하세요.'); return; }
-    function count(w) { return state.sentences.filter(function (s) { return s.w === w; }).length; }
-    state.measure.post = { core: count(3), ev: count(2), bg: count(1), c: state.links.length };
-    save();
-    fillMeasure();
-    toast('실습 결과를 적용 후 칸에 넣었습니다.');
-  });
-
-  /* 템플릿 */
-  var wikiCurrent = 0;
-  function wikiItems() {
-    return TEMPLATES.concat(CLOUD.wiki.map(function (t) {
-      var author = t.profiles && t.profiles.user_name;
-      return {
-        name: t.title, cloudId: t.id, body: t.markdown_content,
-        sub: t.approved ? t.category : '승인 대기',
-        meta: (t.approved ? '' : '승인 대기 중이며 나에게만 보입니다. ') + (author ? '작성자: ' + author : ''),
-        own: !!CLOUD.user && t.user_id === CLOUD.user.id
-      };
-    }));
-  }
-  function renderWiki() {
-    var items = wikiItems();
-    if (wikiCurrent >= items.length) wikiCurrent = 0;
-    var cur = items[wikiCurrent];
-    $('wiki-list').innerHTML = items.map(function (t, i) {
-      return '<button type="button" data-tpl="' + i + '" aria-pressed="' + (i === wikiCurrent) + '">' + esc(t.name) + '<span>' + esc(t.sub) + '</span></button>';
-    }).join('');
-    $('wiki-doc-title').textContent = cur.cloudId ? cur.name : cur.name + ' 템플릿';
-    $('wiki-doc-body').textContent = cur.body;
-    $('wiki-meta').textContent = cur.meta || '';
-    $('wiki-del').hidden = !cur.own;
-  }
-  $('wiki-list').addEventListener('click', function (e) {
-    var b = e.target.closest('[data-tpl]');
-    if (!b) return;
-    wikiCurrent = +b.dataset.tpl;
-    renderWiki();
-    var again = $('wiki-list').querySelector('[data-tpl="' + wikiCurrent + '"]');
-    if (again) again.focus();
-  });
-  $('wiki-copy').addEventListener('click', function () {
-    copyText(wikiItems()[wikiCurrent].body, '템플릿을 복사했습니다.');
-  });
-  $('wiki-del').addEventListener('click', async function () {
-    var cur = wikiItems()[wikiCurrent];
-    if (!cur.own || !window.confirm('이 제출을 삭제할까요?')) return;
-    var res = await CLOUD.sb.from('wiki_templates').delete().eq('id', cur.cloudId);
-    if (res.error) { toast(cloudError(res.error)); return; }
-    wikiCurrent = 0;
-    await loadWiki();
-    toast('제출을 삭제했습니다.');
-  });
-  if (CONFIG.repoUrl) {
-    var contrib = $('wiki-contrib');
-    contrib.hidden = false;
-    contrib.innerHTML = '새 템플릿이나 수정 제안은 <a href="' + esc(CONFIG.repoUrl) + '/issues">GitHub Issues</a>에 남겨 주세요.';
   }
 
   /* 히어로: 같은 글을 네 단계로 보기 */
@@ -1600,6 +1791,7 @@ input[type="email"], input[type="password"] {
   async function cloudSave() {
     if (!CLOUD.user) { openAuth(cloudSave); return; }
     if (!hasWork()) { toast('먼저 분석할 글을 입력하세요.'); return; }
+    if (state.step === 0 && textChanged()) { applyText(splitSentences(state.text)); render(); }
     var btn = $('cloud-save');
     var body = {
       title: (state.meta.title || '').trim().slice(0, 200) || '제목 없는 글',
@@ -1620,7 +1812,7 @@ input[type="email"], input[type="password"] {
     if (res.error) { toast(cloudError(res.error)); return; }
     state.cloudId = res.data.id;
     save();
-    toast('클라우드에 저장했습니다.');
+    toast('초안을 저장했습니다.');
   }
   async function openNotes() {
     if (!CLOUD.user) { openAuth(openNotes); return; }
@@ -1630,7 +1822,7 @@ input[type="email"], input[type="password"] {
     $('notes-dialog').showModal();
     var res = await CLOUD.sb.from('craft_entries').select('id, title, updated_at').order('updated_at', { ascending: false }).limit(100);
     if (res.error) { list.textContent = ''; $('notes-msg').textContent = cloudError(res.error); return; }
-    if (!res.data.length) { list.innerHTML = '<div class="empty">저장한 노트가 없습니다.</div>'; return; }
+    if (!res.data.length) { list.innerHTML = '<div class="empty">저장한 초안이 없습니다.</div>'; return; }
     list.innerHTML = res.data.map(function (n) {
       return '<div class="note-row"><span>' + esc(n.title) + '<span class="meta">' + esc(new Date(n.updated_at).toLocaleString('ko-KR')) + '</span></span>' +
         '<span class="acts"><button class="btn small" type="button" data-note-open="' + esc(n.id) + '">불러오기</button>' +
@@ -1640,7 +1832,7 @@ input[type="email"], input[type="password"] {
   $('notes-list').addEventListener('click', async function (e) {
     var open = e.target.dataset.noteOpen, del = e.target.dataset.noteDel, res;
     if (open) {
-      if (hasWork() && state.cloudId !== open && !window.confirm('지금 실습 내용을 이 노트로 바꿀까요? 저장하지 않은 내용은 사라집니다.')) return;
+      if (hasWork() && state.cloudId !== open && !window.confirm('지금 실습 내용을 이 초안으로 바꿀까요? 저장하지 않은 내용은 사라집니다.')) return;
       res = await CLOUD.sb.from('craft_entries').select('id, title, source, question, raw_text, data').eq('id', open).single();
       if (res.error) { $('notes-msg').textContent = cloudError(res.error); return; }
       var d = res.data.data || {}, next = blank();
@@ -1656,9 +1848,9 @@ input[type="email"], input[type="password"] {
       save();
       render();
       $('notes-dialog').close();
-      toast('노트를 불러왔습니다.');
+      toast('초안을 불러왔습니다.');
     } else if (del) {
-      if (!window.confirm('이 노트를 삭제할까요? 되돌릴 수 없습니다.')) return;
+      if (!window.confirm('이 초안을 삭제할까요? 되돌릴 수 없습니다.')) return;
       res = await CLOUD.sb.from('craft_entries').delete().eq('id', del);
       if (res.error) { $('notes-msg').textContent = cloudError(res.error); return; }
       if (state.cloudId === del) { state.cloudId = null; save(); }
@@ -1667,85 +1859,575 @@ input[type="email"], input[type="password"] {
   });
   function openNotesRefresh() { $('notes-dialog').close(); openNotes(); }
 
-  /* 클라우드: Wiki */
-  async function loadWiki() {
-    var res = await CLOUD.sb.from('wiki_templates')
-      .select('id, user_id, title, category, markdown_content, approved, profiles(user_name)')
-      .order('created_at', { ascending: false }).limit(100);
-    CLOUD.wiki = res.error ? [] : res.data;
-    renderWiki();
-  }
-  async function submitWiki(btn) {
-    if (!CLOUD.user) { openAuth(); return; }
-    btn.disabled = true;
-    var res = await CLOUD.sb.from('wiki_templates').insert({
-      entry_id: state.cloudId,
-      title: (state.meta.title || '').trim().slice(0, 200) || '제목 없는 글',
-      category: $('wiki-category').value,
-      markdown_content: buildMarkdown().slice(0, 40000)
+  /* 화면 전환 */
+  var VIEWS_MAIN = ['wiki', 'article', 'editor', 'practice', 'about'];
+  var UUID = /^[0-9a-f-]{36}$/i;
+  function showView(name, nav) {
+    VIEWS_MAIN.forEach(function (v) { $('view-' + v).hidden = v !== name; });
+    document.querySelectorAll('[data-nav]').forEach(function (a) {
+      if (a.dataset.nav === nav) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
     });
-    btn.disabled = false;
-    if (res.error) { toast(cloudError(res.error)); return; }
-    await loadWiki();
-    toast('제출했습니다. 승인되면 공개됩니다.');
+  }
+  function route() {
+    var h = location.hash.replace(/^#/, '') || '/';
+    if (h === 'practice-tool' || h === 'main') return;
+    var parts = h.split('/').filter(Boolean);
+    var page = parts[0] || '';
+    var key = h;
+    if (page === 'practice') showView('practice', 'practice');
+    else if (page === 'about') showView('about', 'about');
+    else if (page === 'random') { goRandom(); return; }
+    else if (page === 'article' && UUID.test(parts[1] || '')) { showView('article', ''); openArticle(parts[1]); }
+    else if (page === 'new') { showView('editor', 'new'); openEditor(null, key); }
+    else if (page === 'edit' && UUID.test(parts[1] || '')) { showView('editor', ''); openEditor(parts[1], key); }
+    else {
+      WIKI.all = page === 'all';
+      showView('wiki', WIKI.all ? 'all' : 'wiki');
+      loadList(true);
+      loadStats();
+      loadCats();
+    }
+    if (WIKI.lastKey !== key) window.scrollTo(0, 0);
+    WIKI.lastKey = key;
+  }
+  window.addEventListener('hashchange', route);
+
+  /* 위키 공통 */
+  var WIKI = {
+    q: '', type: '', measured: false, offset: 0, size: 20, token: 0, lastKey: '',
+    article: null, editKey: '', base: null, restore: null, prefill: null, mine: false, preview: false
+  };
+  function one(x) { return Array.isArray(x) ? x[0] : x; }
+  function reviewCount(a) {
+    return (a.article_reviews || []).filter(function (r) { return r.version === a.version; }).length;
+  }
+  function badges(a) {
+    var m = one(a.article_measurements), n = reviewCount(a), out = '';
+    if (m) out += '<span class="badge measure">측정 ' + Number(m.pre_d).toFixed(2) + ' → ' + Number(m.post_d).toFixed(2) + '</span>';
+    if (n) out += '<span class="badge peer">동료 확인 ' + n + '명</span>';
+    return out;
+  }
+  function sourceLine(a) {
+    return [a.authors, a.paper_title, a.publication, a.year].filter(Boolean).join(', ');
+  }
+  function dateText(v) { return new Date(v).toLocaleDateString('ko-KR'); }
+  function needConfig(host) {
+    host.innerHTML = '<div class="notice">위키를 쓰려면 사이트 코드의 CONFIG에 Supabase 주소와 공개용 키를 넣어야 합니다.</div>';
+  }
+  function renderMd(md) {
+    if (!window.marked || !window.DOMPurify) return '<pre>' + esc(md) + '</pre>';
+    var html = window.marked.parse(md, { breaks: true, gfm: true });
+    return window.DOMPurify.sanitize(html, { FORBID_TAGS: ['style', 'form', 'input'], FORBID_ATTR: ['style'] });
+  }
+  if (window.DOMPurify) {
+    window.DOMPurify.addHook('afterSanitizeAttributes', function (node) {
+      if (node.tagName === 'A') { node.setAttribute('target', '_blank'); node.setAttribute('rel', 'noopener noreferrer'); }
+      if (node.tagName === 'IMG') node.setAttribute('loading', 'lazy');
+    });
   }
 
-  /* 클라우드: 측정 */
-  async function loadStats() {
-    var box = $('class-stats'), text = $('class-stats-text');
-    box.hidden = !CLOUD.user;
-    if (!CLOUD.user) return;
-    var res = await CLOUD.sb.rpc('class_density_stats');
-    var r = res.data && res.data[0];
-    if (res.error || !r) { text.textContent = '학급 평균을 불러오지 못했습니다.'; return; }
-    text.textContent = r.avg_pre === null
-      ? '지금까지 ' + r.participants + '명이 참여했습니다. 3명 이상 모이면 평균을 보여 줍니다.'
-      : r.participants + '명, 측정 ' + r.measurements + '회: 적용 전 ' + Number(r.avg_pre).toFixed(2) + ', 적용 후 ' + Number(r.avg_post).toFixed(2);
+  /* 목록과 검색 */
+  var LIST_COLS = 'id, title, paper_title, authors, year, publication, doc_type, field, tags, summary, version, updated_at';
+  async function loadList(reset) {
+    var box = $('wiki-results');
+    if (!CLOUD.sb) { needConfig(box); return; }
+    if (reset) {
+      WIKI.offset = 0;
+      box.textContent = '불러오는 중입니다.';
+      var plain = !WIKI.q && !WIKI.all;
+      $('list-title').textContent = WIKI.q ? '“' + WIKI.q + '” 검색 결과' : (WIKI.all ? '모든 분석글' : '대문');
+      $('list-heading').textContent = WIKI.q ? '찾은 분석글' : (WIKI.all ? '최근 수정순' : '최근 바뀐 분석글');
+      $('front-intro').hidden = !plain;
+      $('front-side').hidden = !plain;
+      $('front-grid').classList.toggle('solo', !plain);
+    }
+    var token = ++WIKI.token;
+    var embed = WIKI.measured ? 'article_measurements!inner(pre_d, post_d)' : 'article_measurements(pre_d, post_d)';
+    var q = CLOUD.sb.from('wiki_articles')
+      .select(LIST_COLS + ', ' + embed + ', article_reviews(version)')
+      .order('updated_at', { ascending: false })
+      .range(WIKI.offset, WIKI.offset + WIKI.size - 1);
+    WIKI.q.toLowerCase().split(/\s+/).filter(Boolean).forEach(function (w) {
+      q = q.ilike('search_text', '%' + w.replace(/[\\%_*]/g, '\\$&') + '%');
+    });
+    if (WIKI.type) q = q.eq('doc_type', WIKI.type);
+    var res = await q;
+    if (token !== WIKI.token) return;
+    if (res.error) { box.textContent = cloudError(res.error); return; }
+    var html = res.data.map(function (a) {
+      return '<article class="result"><h2><a href="#/article/' + esc(a.id) + '">' + esc(a.title) + '</a></h2>' +
+        (sourceLine(a) ? '<p class="src">' + esc(sourceLine(a)) + '</p>' : '') +
+        (a.summary ? '<p class="sum">' + esc(a.summary) + '</p>' : '') +
+        '<div class="marks"><span class="badge type">' + esc(a.doc_type) + '</span>' + badges(a) +
+        (a.tags ? '<span class="tag">' + esc(a.tags) + '</span>' : '') + '</div></article>';
+    }).join('');
+    if (reset) {
+      box.innerHTML = html || '<div class="empty">' + (WIKI.q || WIKI.type || WIKI.measured
+        ? '조건에 맞는 분석글이 없습니다. 검색어를 바꾸거나 직접 첫 글을 써 보세요.'
+        : '아직 분석글이 없습니다. 첫 글을 올려 보세요.') + '<br><a class="btn small" href="#/new">분석글 쓰기</a></div>';
+    } else box.insertAdjacentHTML('beforeend', html);
+    WIKI.offset += res.data.length;
+    $('wiki-more').hidden = res.data.length < WIKI.size;
   }
-  async function saveMeasure() {
-    if (!CLOUD.user) { openAuth(saveMeasure); return; }
-    var pre = state.measure.pre, post = state.measure.post;
-    if (density(pre) === null || density(post) === null || pre.c == null || post.c == null) {
-      toast('적용 전과 후의 값을 모두 입력하세요.');
+  async function loadStats() {
+    if (!CLOUD.sb) return;
+    var res = await CLOUD.sb.rpc('wiki_stats');
+    var r = res.data && res.data[0], el = $('wiki-stats');
+    if (res.error || !r) { el.textContent = ''; return; }
+    el.textContent = '분석글 ' + r.articles + '편, 측정 첨부 ' + r.measured + '편' +
+      (r.avg_pre !== null ? ', 평균 밀도 ' + Number(r.avg_pre).toFixed(2) + ' → ' + Number(r.avg_post).toFixed(2) + ' (' + r.participants + '명)' : '');
+  }
+  var searchTimer;
+  function onList() { return !$('view-wiki').hidden; }
+  function runSearch(q) {
+    WIKI.q = q.trim();
+    $('wiki-q').value = q;
+    if (onList()) loadList(true); else location.hash = '#/';
+  }
+  $('wiki-q').addEventListener('input', function (e) {
+    clearTimeout(searchTimer);
+    if (!onList()) return;
+    searchTimer = setTimeout(function () { runSearch(e.target.value); }, 300);
+  });
+  $('wiki-search').addEventListener('submit', function (e) {
+    e.preventDefault();
+    clearTimeout(searchTimer);
+    runSearch($('wiki-q').value);
+  });
+  document.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-cat]');
+    if (c) { runSearch(c.dataset.cat); return; }
+    var home = e.target.closest('.brand, [data-nav="wiki"], [data-nav="all"]');
+    if (home) {
+      WIKI.q = '';
+      WIKI.type = '';
+      $('wiki-q').value = '';
+      document.querySelectorAll('#type-filter button').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.type === '')); });
+    }
+  });
+  async function loadCats() {
+    if (!CLOUD.sb) return;
+    var res = await CLOUD.sb.from('wiki_articles').select('field').neq('field', '').limit(500);
+    var box = $('cat-list');
+    if (res.error) { box.textContent = ''; return; }
+    var count = {};
+    res.data.forEach(function (r) { count[r.field] = (count[r.field] || 0) + 1; });
+    var names = Object.keys(count).sort(function (a, b) { return count[b] - count[a]; }).slice(0, 12);
+    box.innerHTML = names.length ? names.map(function (n) {
+      return '<li><button class="link-plain" type="button" data-cat="' + esc(n) + '">' + esc(n) + '</button> (' + count[n] + ')</li>';
+    }).join('') : '<li>아직 분류가 없습니다.</li>';
+  }
+  async function goRandom() {
+    if (!CLOUD.sb) { location.replace('#/'); return; }
+    var res = await CLOUD.sb.from('wiki_articles').select('id').limit(500);
+    if (res.error || !res.data.length) { toast('아직 분석글이 없습니다.'); location.replace('#/'); return; }
+    location.replace('#/article/' + res.data[Math.floor(Math.random() * res.data.length)].id);
+  }
+  $('type-filter').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-type]');
+    if (!b) return;
+    WIKI.type = b.dataset.type;
+    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    loadList(true);
+  });
+  $('only-measured').addEventListener('change', function (e) { WIKI.measured = e.target.checked; loadList(true); });
+  $('wiki-more').addEventListener('click', function () { loadList(false); });
+
+  /* 분석글 보기 */
+  var ARTICLE_SEL = '*, author:profiles!wiki_articles_created_by_fkey(user_name), editor:profiles!wiki_articles_updated_by_fkey(user_name), article_measurements(pre_core, pre_evidence, pre_bg, pre_c, post_core, post_evidence, post_bg, post_c, pre_d, post_d), article_reviews(user_id, version)';
+  function safeUrl(u) { return /^https?:\/\//i.test(u || '') ? u : ''; }
+  function infoRow(label, value) { return value ? '<tr><th scope="row">' + label + '</th><td>' + value + '</td></tr>' : ''; }
+  function verifyHtml(a, own, mineReviewed) {
+    var m = one(a.article_measurements), n = reviewCount(a), lv = n ? 2 : (m ? 1 : 0);
+    var d = m ? Number(m.pre_d).toFixed(2) + ' → ' + Number(m.post_d).toFixed(2) : '';
+    var text = lv === 2
+      ? n + '명이 현재 판을 원문과 대조해 확인했습니다.' + (m ? ' 구조화 밀도 ' + d + ' (작성자 입력값).' : '')
+      : (lv === 1
+        ? '구조화 밀도 ' + d + '. 작성자가 직접 입력한 값이며 아직 동료 확인 전입니다.'
+        : '효과 측정이 첨부되지 않은 글입니다. 작성자의 해석이므로 원문과 함께 읽어 주세요.');
+    var steps = [['작성', true], ['측정 첨부', !!m], ['동료 확인', n > 0]].map(function (s) {
+      return '<li' + (s[1] ? ' class="done"' : '') + '>' + (s[1] ? '✓ ' : '') + s[0] + '</li>';
+    }).join('');
+    return '<div class="verify lv' + lv + '"><div><ol class="verify-steps">' + steps + '</ol><p>' + esc(text) + '</p></div>' +
+      (own ? '' : '<button class="btn small ' + (mineReviewed ? 'line' : '') + '" type="button" data-a="review">' +
+        (mineReviewed ? '확인 취소' : '원문과 대조해 확인') + '</button>') + '</div>';
+  }
+  function articleHtml(a) {
+    var me = CLOUD.user && CLOUD.user.id;
+    var mineReviewed = (a.article_reviews || []).some(function (r) { return r.version === a.version && r.user_id === me; });
+    var own = me && a.created_by === me;
+    var url = safeUrl(a.doc_url);
+    var cats = [a.doc_type, a.field].concat((a.tags || '').split(',')).map(function (t) { return t.trim(); }).filter(Boolean);
+    return '<div class="doc-tabs"><a class="on" href="#/article/' + esc(a.id) + '" aria-current="page">문서</a>' +
+      '<a href="#/edit/' + esc(a.id) + '">수정</a>' +
+      '<button type="button" data-a="history">수정 기록</button>' +
+      (own ? '<button class="del" type="button" data-a="delete">삭제</button>' : '') + '</div>' +
+      '<article class="doc"><h1>' + esc(a.title) + '</h1>' +
+      '<p class="doc-sub">최종 수정 ' + dateText(a.updated_at) + ', ' + esc((a.editor && a.editor.user_name) || '') + ' (' + a.version + '판)</p>' +
+      verifyHtml(a, own, mineReviewed) +
+      '<aside class="infobox" aria-label="문헌 정보"><h2>문헌 정보</h2><table><tbody>' +
+      infoRow('원문', esc(a.paper_title)) + infoRow('저자', esc(a.authors)) + infoRow('발행처', esc(a.publication)) +
+      infoRow('연도', esc(a.year)) + infoRow('종류', esc(a.doc_type)) + infoRow('분야', esc(a.field)) +
+      infoRow('링크', url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">원문 열기</a>' : '') +
+      '</tbody></table></aside>' +
+      (a.summary ? '<p class="doc-lead">' + esc(a.summary) + '</p>' : '') +
+      '<div id="toc-slot"></div><div class="prose" id="doc-body">' + renderMd(a.body) + '</div>' +
+      '<div class="catbar"><b>분류</b>' + cats.map(function (c) {
+        return '<button class="link-plain" type="button" data-cat="' + esc(c) + '">' + esc(c) + '</button>';
+      }).join('') + '</div>' +
+      '<p class="doc-foot">처음 작성 ' + dateText(a.created_at) + ', ' + esc((a.author && a.author.user_name) || '') + '. 로그인한 사용자는 누구나 이 글을 고칠 수 있으며 모든 판이 수정 기록에 남습니다.</p></article>';
+  }
+  /* 본문 제목으로 번호와 목차를 만듭니다. */
+  function buildToc() {
+    var heads = document.querySelectorAll('#doc-body h1, #doc-body h2, #doc-body h3');
+    if (heads.length < 2) return;
+    var major = 0, minor = 0, items = '';
+    heads.forEach(function (h, i) {
+      var sub = h.tagName === 'H3';
+      if (sub) minor += 1; else { major += 1; minor = 0; }
+      var no = sub ? (major ? major + '.' + minor : String(minor)) : String(major);
+      var text = h.textContent.replace(/^\d+(\.\d+)*[.)]?\s+/, '');
+      h.id = 'sec-' + (i + 1);
+      h.innerHTML = '<span class="secno">' + no + '</span>' + esc(text);
+      items += '<li' + (sub ? ' class="lv3"' : '') + '><a href="#" data-sec="' + h.id + '"><span class="no">' + no + '</span>' + esc(text) + '</a></li>';
+    });
+    $('toc-slot').innerHTML = '<nav class="toc" aria-label="목차"><h2>목차</h2><ol>' + items + '</ol></nav>';
+  }
+  async function openArticle(id) {
+    var host = $('article-host');
+    if (!CLOUD.sb) { needConfig(host); return; }
+    host.textContent = '불러오는 중입니다.';
+    var res = await CLOUD.sb.from('wiki_articles').select(ARTICLE_SEL).eq('id', id).maybeSingle();
+    if (res.error) { host.textContent = cloudError(res.error); return; }
+    if (!res.data) { host.innerHTML = '<div class="notice">분석글을 찾을 수 없습니다.<br><a class="btn small" href="#/">위키로 돌아가기</a></div>'; return; }
+    WIKI.article = res.data;
+    host.innerHTML = articleHtml(res.data);
+    buildToc();
+  }
+  $('article-host').addEventListener('click', async function (e) {
+    var sec = e.target.closest('[data-sec]');
+    if (sec) { e.preventDefault(); $(sec.dataset.sec).scrollIntoView(); return; }
+    var b = e.target.closest('[data-a]'), a = WIKI.article, res;
+    if (!b || !a) return;
+    if (b.dataset.a === 'history') openHistory(a.id);
+    if (b.dataset.a === 'delete') {
+      if (!window.confirm('이 분석글과 수정 기록을 모두 삭제할까요? 되돌릴 수 없습니다.')) return;
+      res = await CLOUD.sb.from('wiki_articles').delete().eq('id', a.id);
+      if (res.error) { toast(cloudError(res.error)); return; }
+      toast('분석글을 삭제했습니다.');
+      location.hash = '#/';
+    }
+    if (b.dataset.a === 'review') {
+      if (!CLOUD.user) { openAuth(); return; }
+      var reviewed = (a.article_reviews || []).some(function (r) { return r.version === a.version && r.user_id === CLOUD.user.id; });
+      res = reviewed
+        ? await CLOUD.sb.from('article_reviews').delete().match({ article_id: a.id, user_id: CLOUD.user.id, version: a.version })
+        : await CLOUD.sb.from('article_reviews').insert({ article_id: a.id, version: a.version });
+      if (res.error) { toast(cloudError(res.error)); return; }
+      openArticle(a.id);
+    }
+  });
+
+  /* 수정 기록 */
+  var HISTORY = [];
+  async function openHistory(id) {
+    var list = $('history-list');
+    list.textContent = '불러오는 중입니다.';
+    $('history-dialog').showModal();
+    var res = await CLOUD.sb.from('wiki_revisions')
+      .select('*, profiles(user_name)').eq('article_id', id).order('version', { ascending: false }).limit(100);
+    if (res.error) { list.textContent = cloudError(res.error); return; }
+    HISTORY = res.data;
+    list.innerHTML = HISTORY.map(function (r, i) {
+      var who = r.profiles && r.profiles.user_name;
+      return '<div class="note-row"><span>' + r.version + '판 ' + esc(r.edit_note || (r.version === 1 ? '처음 작성' : '')) +
+        '<span class="meta">' + esc(who || '') + ', ' + esc(new Date(r.created_at).toLocaleString('ko-KR')) + '</span></span>' +
+        (i ? '<span class="acts"><button class="btn small line" type="button" data-rev="' + i + '">이 판에서 수정</button></span>' : '') + '</div>';
+    }).join('');
+  }
+  $('history-list').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-rev]');
+    if (!b) return;
+    WIKI.restore = HISTORY[+b.dataset.rev];
+    WIKI.editKey = '';
+    $('history-dialog').close();
+    var target = '#/edit/' + WIKI.restore.article_id;
+    if (location.hash === target) route(); else location.hash = target;
+  });
+
+  /* 분석글 쓰기와 수정 */
+  var FIELDS = ['title', 'paper_title', 'authors', 'year', 'publication', 'doc_url', 'doc_type', 'field', 'tags', 'summary', 'body'];
+  function measureRow(label, key) {
+    return '<tr><th scope="row">' + label + '</th>' + ['pre', 'post'].map(function (g) {
+      return '<td><input type="number" min="0" inputmode="numeric" data-em="' + g + '.' + key + '" aria-label="' + (g === 'pre' ? '적용 전 ' : '적용 후 ') + label + '"></td>';
+    }).join('') + '</tr>';
+  }
+  function editorHtml(isNew, canMeasure) {
+    var tpl = TEMPLATES.map(function (t, i) { return '<option value="' + i + '">' + esc(t.name) + '</option>'; }).join('');
+    function input(id, label, attr) {
+      return '<label class="field"><span>' + label + '</span><input type="text" id="e-' + id + '" ' + (attr || '') + '></label>';
+    }
+    return '<form class="editor" id="editor-form"><h1>' + (isNew ? '분석글 쓰기' : '분석글 수정') + '</h1>' +
+      input('title', '분석글 제목 (필수)', 'required maxlength="200"') +
+      '<div class="field-row">' + input('paper_title', '원문 제목', 'maxlength="300"') + input('authors', '저자·교수', 'maxlength="300"') + '</div>' +
+      '<div class="field-row">' + input('publication', '학술지·출판사', 'maxlength="200"') + input('year', '발행 연도', 'maxlength="10"') + '</div>' +
+      '<div class="field-row">' + input('doc_url', '원문 링크', 'placeholder="https://" maxlength="500"') +
+      '<label class="field"><span>글 종류</span><select id="e-doc_type"><option>논문</option><option>서적</option><option>기술 문서</option><option>기타</option></select></label></div>' +
+      '<div class="field-row">' + input('field', '분야', 'placeholder="에너지공학" maxlength="100"') + input('tags', '태그 (쉼표로 구분)', 'placeholder="다크패턴, UX" maxlength="300"') + '</div>' +
+      input('summary', '한 줄 요약', 'maxlength="500"') +
+      '<div class="editor-tools">' +
+      '<button class="btn small line" type="button" data-e="image">사진 추가</button>' +
+      '<input type="file" id="e-file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>' +
+      '<label class="check">틀 넣기 <select id="e-template" style="height:34px;padding:2px 6px"><option value="">선택</option>' + tpl + '</select></label>' +
+      '<div class="editor-tabs"><button type="button" data-e="write" aria-pressed="true">작성</button><button type="button" data-e="preview" aria-pressed="false">미리보기</button></div></div>' +
+      '<label class="field"><span class="sr-only">본문</span><textarea id="e-body" required maxlength="60000" placeholder="분석 내용을 Markdown으로 쓰세요. 사진은 붙여넣기로도 추가할 수 있습니다."></textarea></label>' +
+      '<div class="prose" id="e-preview" hidden></div>' +
+      '<p class="hint">사진 한 장은 5MB 이하입니다. 논문의 그림을 쓸 때는 출처를 함께 적어 주세요.</p>' +
+      (canMeasure
+        ? '<details class="measure-box"><summary>효과 측정 첨부 (선택)</summary><div class="calc">' +
+          '<p class="hint">첨부하면 목록과 정보란에 측정 표시가 나타납니다. 밀도 계산법은 소개 화면에 있습니다.</p>' +
+          '<table><thead><tr><th scope="col">항목</th><th scope="col">적용 전</th><th scope="col">적용 후</th></tr></thead><tbody>' +
+          measureRow('핵심 문장 수', 'core') + measureRow('근거 문장 수', 'ev') + measureRow('배경 문장 수', 'bg') + measureRow('유효 인과 연결 수', 'c') +
+          '</tbody><tfoot><tr><th scope="row">밀도 D</th><td id="ed-pre">–</td><td id="ed-post">–</td></tr></tfoot></table></div></details>'
+        : '<p class="hint" style="margin-top:14px">측정 첨부는 처음 글을 쓴 사람만 바꿀 수 있습니다.</p>') +
+      (isNew ? '' : input('edit_note', '수정 내용 요약', 'maxlength="200" placeholder="무엇을 고쳤나요?"')) +
+      '<p class="form-msg" id="e-msg" role="alert"></p>' +
+      '<div class="editor-foot"><button class="btn" type="submit" id="e-save">' + (isNew ? '위키에 올리기' : '수정 저장') + '</button>' +
+      '<button class="btn line" type="button" data-e="cancel">취소</button></div></form>';
+  }
+  function draftKey() { return 'craft-wiki-draft-' + (WIKI.base ? WIKI.base.id : 'new'); }
+  function readForm() {
+    var o = {};
+    FIELDS.forEach(function (f) { o[f] = $('e-' + f).value; });
+    return o;
+  }
+  function fillForm(o) {
+    FIELDS.forEach(function (f) { if (o[f] != null) $('e-' + f).value = o[f]; });
+  }
+  function readMeasure() {
+    var m = { pre: {}, post: {} }, any = false;
+    document.querySelectorAll('[data-em]').forEach(function (el) {
+      var p = el.dataset.em.split('.');
+      if (el.value !== '') { m[p[0]][p[1]] = Math.max(0, Math.floor(+el.value)); any = true; }
+    });
+    m.any = any;
+    return m;
+  }
+  function fillMeasureForm(m) {
+    document.querySelectorAll('[data-em]').forEach(function (el) {
+      var p = el.dataset.em.split('.');
+      var v = m[p[0]] && m[p[0]][p[1]];
+      el.value = v == null ? '' : v;
+    });
+    updateMeasureForm();
+    var box = document.querySelector('.measure-box');
+    if (box && document.querySelector('[data-em]') && readMeasure().any) box.open = true;
+  }
+  function updateMeasureForm() {
+    if (!$('ed-pre')) return;
+    var m = readMeasure(), a = density(m.pre), b = density(m.post);
+    $('ed-pre').textContent = a === null ? '–' : a.toFixed(2);
+    $('ed-post').textContent = b === null ? '–' : b.toFixed(2);
+  }
+  function measureFromRow(r) {
+    return r ? {
+      pre: { core: r.pre_core, ev: r.pre_evidence, bg: r.pre_bg, c: r.pre_c },
+      post: { core: r.post_core, ev: r.post_evidence, bg: r.post_bg, c: r.post_c }
+    } : { pre: {}, post: {} };
+  }
+  async function openEditor(id, key) {
+    var host = $('editor-host');
+    if (!CLOUD.sb) { needConfig(host); return; }
+    if (!CLOUD.ready) { host.textContent = '불러오는 중입니다.'; return; }
+    if (!CLOUD.user) {
+      WIKI.editKey = '';
+      host.innerHTML = '<div class="notice">분석글을 쓰고 고치려면 로그인이 필요합니다.<br><button class="btn small" type="button" id="e-login">로그인</button></div>';
+      $('e-login').addEventListener('click', function () { openAuth(); });
       return;
     }
-    function n(v) { return Math.floor(+v || 0); }
-    var btn = $('m-save');
+    if (WIKI.editKey === key && $('editor-form')) return;
+    var row = null;
+    if (id) {
+      host.textContent = '불러오는 중입니다.';
+      var res = await CLOUD.sb.from('wiki_articles').select(ARTICLE_SEL).eq('id', id).maybeSingle();
+      if (res.error || !res.data) { host.textContent = res.error ? cloudError(res.error) : '분석글을 찾을 수 없습니다.'; return; }
+      row = res.data;
+    }
+    WIKI.editKey = key;
+    WIKI.base = row ? { id: row.id, version: row.version, created_by: row.created_by } : null;
+    WIKI.mine = !row || row.created_by === CLOUD.user.id;
+    host.innerHTML = editorHtml(!row, WIKI.mine);
+    if (row) fillForm(row);
+    var measured = row ? one(row.article_measurements) : null;
+    WIKI.hadMeasure = !!measured;
+    if (WIKI.mine) fillMeasureForm(measureFromRow(measured));
+    var draft = null;
+    try { draft = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (e) { draft = null; }
+    if (WIKI.restore && row) {
+      fillForm(WIKI.restore);
+      $('e-edit_note').value = WIKI.restore.version + '판으로 되돌림';
+      WIKI.restore = null;
+    } else if (WIKI.prefill && !row) {
+      fillForm(WIKI.prefill.form);
+      if (WIKI.mine) fillMeasureForm(WIKI.prefill.measure);
+      WIKI.prefill = null;
+    } else if (draft && (!row || draft.version === row.version)) {
+      fillForm(draft.form);
+      toast('작성 중이던 내용을 불러왔습니다.');
+    }
+  }
+  var draftTimer;
+  function saveDraft() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(function () {
+      if (!$('editor-form')) return;
+      try { localStorage.setItem(draftKey(), JSON.stringify({ version: WIKI.base ? WIKI.base.version : 0, form: readForm() })); } catch (e) { /* 저장 불가 환경 */ }
+    }, 400);
+  }
+  function clearDraft() {
+    clearTimeout(draftTimer);
+    try { localStorage.removeItem(draftKey()); } catch (e) { /* 저장 불가 환경 */ }
+  }
+  function insertAtCursor(text) {
+    var ta = $('e-body'), at = ta.selectionStart || 0;
+    ta.value = ta.value.slice(0, at) + text + ta.value.slice(ta.selectionEnd || at);
+    ta.selectionStart = ta.selectionEnd = at + text.length;
+    ta.focus();
+    saveDraft();
+  }
+  async function uploadImage(file) {
+    var msg = $('e-msg');
+    msg.textContent = '';
+    var ext = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' }[file.type];
+    if (!ext) { msg.textContent = 'JPG, PNG, WEBP, GIF 사진만 올릴 수 있습니다.'; return; }
+    if (file.size > 5242880) { msg.textContent = '사진은 5MB 이하만 올릴 수 있습니다.'; return; }
+    msg.textContent = '사진을 올리는 중입니다.';
+    var path = CLOUD.user.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+    var res = await CLOUD.sb.storage.from('wiki-images').upload(path, file, { contentType: file.type });
+    if (res.error) { msg.textContent = cloudError(res.error); return; }
+    msg.textContent = '';
+    var url = CLOUD.sb.storage.from('wiki-images').getPublicUrl(path).data.publicUrl;
+    insertAtCursor('\n![사진 설명](' + url + ')\n');
+  }
+  async function saveArticle() {
+    var msg = $('e-msg'), btn = $('e-save'), form = readForm(), m = readMeasure();
+    msg.textContent = '';
+    if (form.doc_url && !safeUrl(form.doc_url)) { msg.textContent = '원문 링크는 https://로 시작해야 합니다.'; return; }
+    if (m.any && (density(m.pre) === null || density(m.post) === null || m.pre.c == null || m.post.c == null)) {
+      msg.textContent = '측정을 첨부하려면 적용 전과 후의 값을 모두 입력하세요.';
+      return;
+    }
     btn.disabled = true;
-    var res = await CLOUD.sb.from('density_experiments').insert({
-      pre_core: n(pre.core), pre_evidence: n(pre.ev), pre_bg: n(pre.bg), pre_c: n(pre.c),
-      post_core: n(post.core), post_evidence: n(post.ev), post_bg: n(post.bg), post_c: n(post.c)
-    });
+    var res;
+    if (WIKI.base) {
+      form.edit_note = $('e-edit_note').value;
+      res = await CLOUD.sb.from('wiki_articles').update(form).eq('id', WIKI.base.id).eq('version', WIKI.base.version).select('id').maybeSingle();
+      if (!res.error && !res.data) {
+        btn.disabled = false;
+        msg.textContent = '다른 사람이 먼저 수정했습니다. 내 내용을 복사해 둔 뒤 새로고침하세요.';
+        return;
+      }
+    } else {
+      res = await CLOUD.sb.from('wiki_articles').insert(form).select('id').single();
+    }
+    if (res.error) { btn.disabled = false; msg.textContent = cloudError(res.error); return; }
+    var id = res.data.id, mres = null;
+    if (WIKI.mine && m.any) {
+      mres = await CLOUD.sb.from('article_measurements').upsert({
+        article_id: id,
+        pre_core: m.pre.core || 0, pre_evidence: m.pre.ev || 0, pre_bg: m.pre.bg || 0, pre_c: m.pre.c,
+        post_core: m.post.core || 0, post_evidence: m.post.ev || 0, post_bg: m.post.bg || 0, post_c: m.post.c
+      }, { onConflict: 'article_id' });
+    } else if (WIKI.mine && WIKI.hadMeasure) {
+      mres = await CLOUD.sb.from('article_measurements').delete().eq('article_id', id);
+    }
     btn.disabled = false;
-    if (res.error) { toast(cloudError(res.error)); return; }
-    await loadStats();
-    toast('측정 결과를 저장했습니다.');
+    clearDraft();
+    WIKI.editKey = '';
+    toast(mres && mres.error ? '글은 저장했지만 측정은 저장하지 못했습니다.' : '저장했습니다.');
+    location.hash = '#/article/' + id;
+  }
+  var editorHost = $('editor-host');
+  editorHost.addEventListener('input', function (e) {
+    if (e.target.dataset.em) updateMeasureForm();
+    saveDraft();
+  });
+  editorHost.addEventListener('submit', function (e) { e.preventDefault(); saveArticle(); });
+  editorHost.addEventListener('change', function (e) {
+    if (e.target.id === 'e-file' && e.target.files[0]) { uploadImage(e.target.files[0]); e.target.value = ''; }
+    if (e.target.id === 'e-template' && e.target.value !== '') {
+      var body = $('e-body');
+      if (!body.value.trim() || window.confirm('본문 끝에 틀을 추가할까요?')) {
+        body.value += (body.value ? '\n\n' : '') + TEMPLATES[+e.target.value].body;
+        saveDraft();
+      }
+      e.target.value = '';
+    }
+  });
+  editorHost.addEventListener('paste', function (e) {
+    if (e.target.id !== 'e-body' || !e.clipboardData) return;
+    var file = Array.prototype.slice.call(e.clipboardData.files || []).filter(function (f) { return /^image\//.test(f.type); })[0];
+    if (file) { e.preventDefault(); uploadImage(file); }
+  });
+  editorHost.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-e]');
+    if (!b) return;
+    var act = b.dataset.e;
+    if (act === 'image') $('e-file').click();
+    if (act === 'write' || act === 'preview') {
+      var pv = act === 'preview';
+      $('e-body').parentNode.hidden = pv;
+      $('e-preview').hidden = !pv;
+      if (pv) $('e-preview').innerHTML = renderMd($('e-body').value || '내용이 없습니다.');
+      b.parentNode.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    }
+    if (act === 'cancel') {
+      if (!window.confirm('작성 중인 내용을 버리고 나갈까요?')) return;
+      clearDraft();
+      WIKI.editKey = '';
+      var target = WIKI.base ? '#/article/' + WIKI.base.id : '#/';
+      $('editor-host').innerHTML = '';
+      location.hash = target;
+    }
+  });
+  function toWiki() {
+    if (state.step === 0 && textChanged()) applyText(splitSentences(state.text));
+    function count(w) { return state.sentences.filter(function (s) { return s.w === w; }).length; }
+    WIKI.prefill = {
+      form: {
+        title: (state.meta.title || '') + ' 분석', paper_title: state.meta.title, publication: state.meta.source,
+        summary: state.meta.question, body: buildMarkdown()
+      },
+      measure: { pre: {}, post: { core: count(3), ev: count(2), bg: count(1), c: state.links.length } }
+    };
+    WIKI.editKey = '';
+    if (location.hash === '#/new') route(); else location.hash = '#/new';
   }
 
   function initCloud() {
     if (!CONFIG.supabaseUrl || !CONFIG.supabaseKey) return;
     if (!window.supabase) {
-      $('foot-note').textContent = '서버 연결 도구를 불러오지 못해 이 브라우저 저장만 사용합니다. 새로고침해 다시 시도하세요.';
+      $('foot-note').textContent = '서버 연결 도구를 불러오지 못했습니다. 새로고침해 다시 시도하세요.';
       return;
     }
     CLOUD.sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
     $('cloud-save').hidden = false;
     $('cloud-notes').hidden = false;
-    $('m-save').hidden = false;
-    $('practice-store').textContent = '작성 중에는 이 브라우저에 저장되고, 클라우드에 저장하면 다른 기기에서도 이어서 쓸 수 있습니다.';
-    $('foot-note').textContent = 'CRAFT 프로토타입. 저장 버튼을 누른 내용만 서버로 전송됩니다. 노트와 개인 측정값은 본인만 볼 수 있고, 승인된 Wiki 글은 공개됩니다.';
+    $('practice-store').textContent = '작성 중에는 이 브라우저에 저장되고, 로그인하면 초안으로 저장해 다른 기기에서 이어 쓸 수 있습니다.';
+    $('foot-note').textContent = 'CRAFT 분석 위키 프로토타입. 올린 분석글은 누구나 볼 수 있고, 초안은 본인만 볼 수 있습니다.';
     $('cloud-save').addEventListener('click', cloudSave);
     $('cloud-notes').addEventListener('click', openNotes);
-    $('m-save').addEventListener('click', saveMeasure);
     renderAccount();
     CLOUD.sb.auth.onAuthStateChange(function (event, session) {
       /* SDK 내부 잠금과 겹치지 않도록 다음 틱에서 처리합니다. */
       setTimeout(function () {
-        CLOUD.user = session ? session.user : null;
+        var next = session ? session.user : null;
+        var changed = !CLOUD.ready || (next && next.id) !== (CLOUD.user && CLOUD.user.id);
+        CLOUD.user = next;
+        CLOUD.ready = true;
         renderAccount();
-        loadWiki();
-        loadStats();
-        if (state.step === 4) render();
+        if (changed) route();
       }, 0);
     });
   }
@@ -1754,8 +2436,7 @@ input[type="email"], input[type="password"] {
   initCloud();
   if (typeof state.step !== 'number' || !VIEWS[state.step]) state.step = 0;
   render();
-  fillMeasure();
-  renderWiki();
+  route();
 })();
 </script>
 </body>
