@@ -9,6 +9,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+(function () {
+  var p = {};
+  try { p = JSON.parse(localStorage.getItem('craft-appearance') || '{}') || {}; } catch (e) { p = {}; }
+  var r = document.documentElement;
+  r.dataset.size = p.size || 'm';
+  r.dataset.width = p.width || 'normal';
+  r.dataset.theme = p.theme || 'light';
+  r.dataset.panel = p.panel || 'open';
+})();
+</script>
 <style>
 :root {
   --mat: #1D3F6E;
@@ -33,7 +44,37 @@
   --serif: 'Noto Serif KR', 'Apple SD Gothic Neo', 'Batang', serif;
   --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
   --wrap: 100%;
+  --panel: #F7F8FA;
+  --field-line: #9AA6B4;
+  --blue-line: #B9CBE4;
+  --gold-ink: #5D4B0E;
+  --head: #16304F;
+  --c-paper: #2F6FD0;
+  --c-book: #23926A;
+  --c-tech: #8A4FC7;
+  --c-etc: #D9822B;
+  --shadow: 0 1px 2px rgba(20, 30, 45, .06), 0 4px 14px rgba(20, 30, 45, .05);
 }
+html[data-theme="dark"] {
+  --mat: #3D6CB5; --mat-deep: #2E5596; --ground: #12161C; --paper: #1A2028; --ink: #E3E8EE; --mat-text: #E3E8EE;
+  --soft: #A3ADBA; --rule: #333E4C; --marker: #E8C95A; --blue: #8AB4F8; --blue-tint: #1E2C42; --blue-line: #2D4769;
+  --red: #F28B82; --red-tint: #3B1E1C; --gray-tint: #252D37; --green: #6CCB9F; --green-tint: #15302A;
+  --gold-tint: #352D12; --gold-line: #C9A63C; --gold-ink: #F0D78A; --panel: #20272F; --field-line: #4A5868; --head: #0C1420;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --mat: #3D6CB5; --mat-deep: #2E5596; --ground: #12161C; --paper: #1A2028; --ink: #E3E8EE; --mat-text: #E3E8EE;
+    --soft: #A3ADBA; --rule: #333E4C; --marker: #E8C95A; --blue: #8AB4F8; --blue-tint: #1E2C42; --blue-line: #2D4769;
+    --red: #F28B82; --red-tint: #3B1E1C; --gray-tint: #252D37; --green: #6CCB9F; --green-tint: #15302A;
+    --gold-tint: #352D12; --gold-line: #C9A63C; --gold-ink: #F0D78A; --panel: #20272F; --field-line: #4A5868; --head: #0C1420;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+html[data-size="s"] { font-size: 93.75%; }
+html[data-size="l"] { font-size: 112.5%; }
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -72,16 +113,16 @@ button { cursor: pointer; }
   border: 2px solid var(--ink); border-radius: 2px;
   font-weight: 500; text-decoration: none; line-height: 1.4;
 }
-.btn:hover { background: #fff; color: var(--ink); }
+.btn:hover { background: var(--paper); color: var(--ink); }
 .btn.line { background: transparent; color: var(--ink); }
 .btn.line:hover { background: var(--ink); color: #fff; }
 .btn.small { padding: 5px 12px; font-size: .9rem; }
 .btn.danger { background: transparent; color: var(--red); border-color: var(--red); }
 .btn.danger:hover { background: var(--red); color: #fff; }
 .mat .btn.primary { background: var(--marker); color: var(--ink); border-color: var(--marker); }
-.mat .btn.primary:hover { background: #fff; border-color: #fff; }
+.mat .btn.primary:hover { background: var(--paper); border-color: #fff; }
 .mat .btn.ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
-.mat .btn.ghost:hover { background: #fff; color: var(--ink); border-color: #fff; }
+.mat .btn.ghost:hover { background: var(--paper); color: var(--ink); border-color: #fff; }
 
 .lens-tabs { display: flex; gap: 4px; padding-left: 18px; }
 .lens-tabs button {
@@ -186,8 +227,8 @@ section.block { padding: clamp(56px, 8vw, 96px) 0; scroll-margin-top: 56px; }
 .field > span { display: block; margin-bottom: 4px; font-size: .92rem; font-weight: 500; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 input[type="text"], input[type="number"], select, textarea {
-  width: 100%; padding: 9px 11px; background: #fff;
-  border: 1.5px solid #8FA39C; border-radius: 2px;
+  width: 100%; padding: 9px 11px; background: var(--paper);
+  border: 1.5px solid var(--field-line); border-radius: 2px;
 }
 input[type="text"], input[type="number"], select { height: 44px; line-height: 1.4; }
 textarea { min-height: 84px; resize: vertical; line-height: 1.65; }
@@ -207,8 +248,8 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 .sentence.w1 .t { background: var(--gray-tint); }
 .roles { display: flex; gap: 3px; }
 .roles button {
-  padding: 3px 9px; font-size: .86rem; background: #fff;
-  border: 1.5px solid #8FA39C; border-radius: 2px;
+  padding: 3px 9px; font-size: .86rem; background: var(--paper);
+  border: 1.5px solid var(--field-line); border-radius: 2px;
 }
 .roles button:hover { border-color: var(--ink); }
 .roles button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
@@ -228,7 +269,7 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 .add-form .span-all { grid-column: 1 / -1; }
 .add-form.flaw .add-btn { justify-self: start; }
 .empty {
-  padding: 24px; border: 1.5px dashed #8FA39C; color: var(--soft); text-align: center;
+  padding: 24px; border: 1.5px dashed var(--field-line); color: var(--soft); text-align: center;
 }
 .empty .btn { margin-top: 10px; }
 
@@ -294,7 +335,7 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 .bars { margin-top: 20px; }
 .bar-row { display: grid; grid-template-columns: 44px 1fr 58px; gap: 10px; align-items: center; margin-bottom: 8px; }
 .bar-track { height: 24px; background: var(--gray-tint); }
-.bar-fill { height: 100%; width: 0; background: #8FA39C; transition: width .3s; }
+.bar-fill { height: 100%; width: 0; background: var(--field-line); transition: width .3s; }
 .bar-row.post .bar-fill { background: var(--mat); }
 .bar-row b { text-align: right; }
 .calc-result { margin-top: 12px; font: 600 1.08rem/1.6 var(--serif); }
@@ -311,7 +352,7 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 .editor-tabs button { padding: 4px 12px; background: var(--ground); border: 0; font-size: .92rem; }
 .editor-tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 #e-body { min-height: 420px; font-family: var(--serif); }
-.editor .prose { margin-top: 0; padding: 18px; min-height: 420px; border: 1.5px solid #8FA39C; }
+.editor .prose { margin-top: 0; padding: 18px; min-height: 420px; border: 1.5px solid var(--field-line); }
 .file-btn { position: relative; }
 .measure-box { margin: 20px 0; padding: 14px 16px; background: var(--ground); }
 .measure-box summary { cursor: pointer; font: 600 1.06rem/1.5 var(--serif); }
@@ -331,7 +372,7 @@ textarea.tall { min-height: 170px; font-family: var(--serif); }
 .refs small { color: var(--soft); font-size: .9rem; }
 
 /* 실습 보조 */
-.ref-list { max-height: 260px; overflow-y: auto; margin: 8px 0 16px; border: 1.5px solid #8FA39C; }
+.ref-list { max-height: 260px; overflow-y: auto; margin: 8px 0 16px; border: 1.5px solid var(--field-line); }
 .ref-list li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 6px; padding: 7px 10px; font: 400 1rem/1.75 var(--serif); cursor: text; border-bottom: 1px solid var(--gray-tint); }
 .ref-list li .n { color: var(--soft); text-align: right; }
 .ref-list li.w3 > span:last-child { background: var(--marker); }
@@ -354,8 +395,8 @@ dialog.wide { width: min(100% - 32px, 620px); }
 .link-btn:hover { color: var(--ink); }
 .form-msg { min-height: 1.6em; margin-top: 10px; font-size: .92rem; color: var(--red); }
 input[type="email"], input[type="password"] {
-  width: 100%; height: 44px; padding: 9px 11px; background: #fff; line-height: 1.4;
-  border: 1.5px solid #8FA39C; border-radius: 2px;
+  width: 100%; height: 44px; padding: 9px 11px; background: var(--paper); line-height: 1.4;
+  border: 1.5px solid var(--field-line); border-radius: 2px;
 }
 .note-row {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center;
@@ -433,12 +474,12 @@ a { color: var(--blue); }
 .brand { display: flex; align-items: center; gap: 10px; flex: none; color: #fff; text-decoration: none; }
 .brand-mark {
   display: grid; place-items: center; width: 34px; height: 34px;
-  background: #fff; color: var(--mat-deep); font: 700 1.2rem/1 var(--serif);
+  background: var(--paper); color: var(--mat-deep); font: 700 1.2rem/1 var(--serif);
 }
 .brand-name { font: 700 1.08rem/1.25 var(--serif); }
 .head-search { display: flex; flex: 1; max-width: 620px; margin: 0; }
 .head-search input {
-  flex: 1; min-width: 0; height: 40px; padding: 0 12px; background: #fff; color: var(--ink);
+  flex: 1; min-width: 0; height: 40px; padding: 0 12px; background: var(--paper); color: var(--ink);
   border: 0; border-radius: 2px 0 0 2px; font-size: .98rem;
 }
 .head-search button {
@@ -452,7 +493,7 @@ a { color: var(--blue); }
   padding: 4px 11px; background: none; color: #fff; white-space: nowrap;
   border: 1px solid rgba(255, 255, 255, .6); border-radius: 2px;
 }
-.account button:hover { background: #fff; color: var(--ink); }
+.account button:hover { background: var(--paper); color: var(--ink); }
 
 .shell {
   display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 0 22px;
@@ -478,7 +519,7 @@ section.block { scroll-margin-top: 70px; }
 .editor { padding: 0; }
 
 /* 대문 */
-.front-intro { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px; align-items: center; padding: 16px 18px; margin-bottom: 18px; background: var(--blue-tint); border: 1px solid #B9CBE4; }
+.front-intro { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px; align-items: center; padding: 16px 18px; margin-bottom: 18px; background: var(--blue-tint); border: 1px solid var(--blue-line); }
 .front-intro h2 { font-size: 1.36rem; }
 .front-intro p { margin-top: 4px; }
 .wiki-stats { grid-column: 1 / -1; margin: 0; font-size: .93rem; color: var(--soft); min-height: 1.6em; }
@@ -502,13 +543,13 @@ section.block { scroll-margin-top: 70px; }
 .result .sum { margin-top: 2px; font-size: .96rem; }
 .result .marks { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; align-items: center; }
 .badge { display: inline-block; padding: 0 7px; font-size: .82rem; font-weight: 500; border: 1px solid transparent; }
-.badge.measure { background: var(--gold-tint); border-color: var(--gold-line); color: #5D4B0E; }
+.badge.measure { background: var(--gold-tint); border-color: var(--gold-line); color: var(--gold-ink); }
 .badge.peer { background: var(--green-tint); border-color: var(--green); color: var(--green); }
 .badge.type { background: var(--gray-tint); }
 .tag { font-size: .86rem; color: var(--soft); }
 .index-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
 .index-table th, .index-table td { padding: 8px 11px; border-bottom: 1px solid var(--gray-tint); text-align: left; vertical-align: top; }
-.index-table th { background: #F8F9FA; font-weight: 500; white-space: nowrap; }
+.index-table th { background: var(--panel); font-weight: 500; white-space: nowrap; }
 .index-table td:last-child { white-space: nowrap; color: var(--soft); }
 .index-table td:first-child a { text-decoration: none; }
 .index-table td:first-child a:hover { text-decoration: underline; }
@@ -536,7 +577,7 @@ section.block { scroll-margin-top: 70px; }
 .doc-lead { font: 400 1.08rem/1.9 var(--serif); }
 
 /* 검증 띠: 이 위키의 고유 요소 */
-.verify { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 18px; align-items: center; margin: 0 0 18px; padding: 11px 14px; border: 1px solid var(--rule); border-left: 6px solid var(--soft); background: #F6F7F9; }
+.verify { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 18px; align-items: center; margin: 0 0 18px; padding: 11px 14px; border: 1px solid var(--rule); border-left: 6px solid var(--soft); background: var(--panel); }
 .verify.lv1 { border-color: var(--gold-line); background: var(--gold-tint); }
 .verify.lv2 { border-color: var(--green); background: var(--green-tint); }
 .verify-steps { display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 4px; font-size: .84rem; }
@@ -548,14 +589,14 @@ section.block { scroll-margin-top: 70px; }
 .verify .btn { white-space: nowrap; }
 
 /* 문헌 정보 상자 */
-.infobox { float: right; clear: right; width: 290px; margin: 0 0 16px 24px; border: 1px solid var(--rule); background: #F8F9FA; font-size: .92rem; }
+.infobox { float: right; clear: right; width: 290px; margin: 0 0 16px 24px; border: 1px solid var(--rule); background: var(--panel); font-size: .92rem; }
 .infobox h2 { padding: 7px 10px; background: var(--mat); color: #fff; font: 700 .98rem/1.45 var(--serif); text-align: center; }
 .infobox table { width: 100%; border-collapse: collapse; }
 .infobox th, .infobox td { padding: 5px 9px; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
 .infobox th { width: 78px; background: var(--gray-tint); font-weight: 500; }
 
 /* 목차 */
-.toc { display: inline-block; min-width: 230px; max-width: 100%; margin: 14px 0 6px; padding: 9px 16px 11px; border: 1px solid var(--rule); background: #F8F9FA; font-size: .95rem; }
+.toc { display: inline-block; min-width: 230px; max-width: 100%; margin: 14px 0 6px; padding: 9px 16px 11px; border: 1px solid var(--rule); background: var(--panel); font-size: .95rem; }
 .toc h2 { font: 700 .98rem/1.6 var(--sans); }
 .toc li { padding: 1px 0; }
 .toc li.lv3 { padding-left: 16px; }
@@ -578,14 +619,14 @@ section.block { scroll-margin-top: 70px; }
 .prose code { padding: 0 .3em; background: var(--gray-tint); font-size: .92em; }
 .prose pre { overflow-x: auto; padding: 12px; background: var(--gray-tint); }
 .prose pre code { padding: 0; background: none; }
-.catbar { clear: both; margin-top: 26px; padding: 7px 11px; border: 1px solid var(--rule); background: #F8F9FA; font-size: .93rem; }
+.catbar { clear: both; margin-top: 26px; padding: 7px 11px; border: 1px solid var(--rule); background: var(--panel); font-size: .93rem; }
 .catbar b { margin-right: 6px; }
 .catbar button + button { margin-left: 10px; padding-left: 10px; border-left: 1px solid var(--rule); }
 .doc-foot { margin-top: 10px; color: var(--soft); font-size: .85rem; }
 
 /* 글쓰기 */
 #e-body { min-height: 380px; font-family: var(--sans); }
-.editor .prose { margin-top: 0; padding: 16px; min-height: 380px; border: 1.5px solid #8FA39C; }
+.editor .prose { margin-top: 0; padding: 16px; min-height: 380px; border: 1.5px solid var(--field-line); }
 
 /* 실습과 소개를 문서 화면에 맞춤 */
 .mat { background: none; color: var(--ink); }
@@ -614,7 +655,7 @@ section.block { scroll-margin-top: 70px; }
 .note-craft { border: 1px solid var(--rule); border-left: 6px solid var(--gold-line); }
 .versus-end { font-size: 1.08rem; }
 .wb-saved { color: var(--soft); }
-.meter { top: 78px; background: #F8F9FA; border: 1px solid var(--rule); color: var(--ink); }
+.meter { top: 78px; background: var(--panel); border: 1px solid var(--rule); color: var(--ink); }
 .meter h3, .meter dd { color: var(--ink); }
 .meter-value { color: var(--mat); font: 700 2.7rem/1.1 var(--serif); }
 .meter-warn { color: var(--red); }
@@ -652,6 +693,152 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
   .doc-tabs a, .doc-tabs button { padding: 5px 10px; font-size: .9rem; }
   .toc { display: block; }
 }
+
+/* ===== 생동감과 기능 추가 ===== */
+.site-head { background: var(--head); }
+.site-head::after {
+  content: ""; display: block; height: 4px;
+  background: linear-gradient(90deg, var(--c-paper) 0 25%, var(--c-book) 25% 50%, var(--c-tech) 50% 75%, var(--c-etc) 75% 100%);
+}
+.brand-mark { background: #fff; color: #16304F; }
+.head-search { position: relative; }
+.head-search button { color: #1C2530; }
+.head-search input { background: #fff; color: #1C2530; }
+.head-btn {
+  flex: none; padding: 5px 11px; background: none; color: #fff; white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, .5); border-radius: 2px; font-size: .92rem;
+}
+.head-btn:hover { background: rgba(255, 255, 255, .14); }
+html[data-panel="open"] .head-btn.ap-toggle { display: none; }
+.kbd { display: inline-block; margin-left: 6px; padding: 0 5px; border: 1px solid rgba(28, 37, 48, .3); border-radius: 3px; font-size: .78rem; color: #55606E; }
+.suggest {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 40;
+  background: var(--paper); color: var(--ink); border: 1px solid var(--rule); box-shadow: var(--shadow);
+}
+.suggest a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: center; padding: 8px 12px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--gray-tint); }
+.suggest a:last-child { border-bottom: 0; }
+.suggest a.on, .suggest a:hover { background: var(--blue-tint); }
+.suggest .t { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.suggest .m { grid-column: 2; font-size: .84rem; color: var(--soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.suggest .all { display: block; padding: 7px 12px; color: var(--blue); font-size: .9rem; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c-etc); }
+.dot.t-논문 { background: var(--c-paper); } .dot.t-서적 { background: var(--c-book); } .dot.t-기술 { background: var(--c-tech); }
+
+.avatar {
+  display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 50%;
+  color: #fff; font-size: .78rem; font-weight: 700; vertical-align: middle;
+}
+.account .avatar { width: 30px; height: 30px; border: 2px solid rgba(255, 255, 255, .7); }
+
+/* 3단 레이아웃 */
+.shell { grid-template-columns: 190px minmax(0, 1fr) 210px; }
+html[data-panel="closed"] .shell { grid-template-columns: 190px minmax(0, 1fr); }
+html[data-panel="closed"] .appearance { display: none; }
+html[data-width="wide"] .shell, html[data-width="wide"] .head-in, html[data-width="wide"] footer .wrap { max-width: none; }
+.appearance { position: sticky; top: 78px; font-size: .95rem; }
+.ap-head { display: flex; align-items: center; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.ap-head h2 { font: 700 1rem/1.4 var(--sans); }
+.ap-head button { padding: 2px 9px; background: var(--gray-tint); border: 0; border-radius: 3px; font-size: .88rem; }
+.ap-head button:hover { background: var(--rule); }
+.appearance fieldset { margin: 14px 0 0; padding: 0; border: 0; }
+.appearance legend { width: 100%; padding-bottom: 4px; margin-bottom: 6px; border-bottom: 1px solid var(--rule); color: var(--soft); font-size: .9rem; }
+.appearance label { display: flex; align-items: center; gap: 9px; padding: 4px 0; cursor: pointer; }
+.appearance input[type="radio"] { width: 18px; height: 18px; margin: 0; accent-color: var(--mat); }
+.side-recent { font-size: .9rem; }
+.side-recent a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 대문 */
+.front-intro { position: relative; overflow: hidden; background: linear-gradient(120deg, var(--blue-tint), var(--paper) 85%); }
+.front-intro::before { content: ""; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px; border-radius: 50%; border: 26px solid var(--blue-line); opacity: .45; }
+.front-intro > * { position: relative; }
+.tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.tile { padding: 10px 12px; background: var(--paper); border: 1px solid var(--rule); border-top: 3px solid var(--c-paper); }
+.tile:nth-child(2) { border-top-color: var(--gold-line); }
+.tile:nth-child(3) { border-top-color: var(--c-book); }
+.tile b { display: block; font: 700 1.7rem/1.2 var(--serif); font-variant-numeric: tabular-nums; }
+.tile span { font-size: .86rem; color: var(--soft); }
+.featured { margin-bottom: 18px; border: 1px solid var(--rule); box-shadow: var(--shadow); }
+.featured-in { display: grid; grid-template-columns: 8px minmax(0, 1fr); }
+.featured-band { background: var(--c-paper); }
+.featured-body { padding: 14px 18px 16px; }
+.featured h3 { font: 700 1.36rem/1.4 var(--serif); margin: 4px 0; }
+.featured h3 a { color: var(--ink); text-decoration: none; }
+.featured h3 a:hover { color: var(--blue); }
+.featured .src { color: var(--soft); font-size: .92rem; }
+.featured p.sum { margin-top: 6px; }
+.featured .more-link { display: inline-block; margin-top: 8px; font-weight: 500; }
+.result { position: relative; padding-left: 17px; transition: background-color .15s; }
+.result::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; border-radius: 2px; background: var(--c-etc); }
+.result.t-논문::before { background: var(--c-paper); }
+.result.t-서적::before { background: var(--c-book); }
+.result.t-기술::before { background: var(--c-tech); }
+.result:hover { background: var(--panel); }
+.who { display: flex; align-items: center; gap: 7px; margin-top: 7px; font-size: .86rem; color: var(--soft); }
+.who .avatar { width: 22px; height: 22px; font-size: .7rem; }
+.badge.type { color: #fff; background: var(--c-etc); }
+.badge.type.t-논문 { background: var(--c-paper); }
+.badge.type.t-서적 { background: var(--c-book); }
+.badge.type.t-기술 { background: var(--c-tech); }
+
+/* 문서 */
+.progress { position: fixed; left: 0; top: 0; z-index: 50; height: 3px; width: 0; background: linear-gradient(90deg, var(--c-paper), var(--c-tech)); transition: width .1s linear; }
+.doc { box-shadow: var(--shadow); }
+.doc-tabs .tool { margin-left: 0; }
+.doc-tabs .first-tool { margin-left: auto; }
+.doc-tabs .del { margin-left: 0; }
+.verify { transition: background-color .2s; }
+.to-top {
+  position: fixed; right: 18px; bottom: 18px; z-index: 30; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--mat); color: #fff; border: 0; box-shadow: var(--shadow); font-size: 1.2rem;
+  opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.to-top.on { opacity: 1; transform: none; pointer-events: auto; }
+.prose :target, .prose h2:target, .prose h3:target { animation: flash 1.4s ease-out; }
+@keyframes flash { from { background: var(--marker); } to { background: transparent; } }
+
+.toast { background: #1C2530; color: #fff; }
+.wiki-stats:empty { display: none; }
+/* 수정 기록 비교 */
+.diff { margin-top: 14px; max-height: 360px; overflow: auto; border: 1px solid var(--rule); font: .9rem/1.6 var(--sans); }
+.diff div { padding: 1px 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.diff .add { background: var(--green-tint); }
+.diff .add::before { content: "+ "; color: var(--green); font-weight: 700; }
+.diff .del { background: var(--red-tint); text-decoration: line-through; text-decoration-color: var(--red); }
+.diff .del::before { content: "− "; color: var(--red); font-weight: 700; }
+.diff .same { color: var(--soft); }
+.diff .gap { color: var(--soft); text-align: center; }
+dialog { background: var(--paper); color: var(--ink); }
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], select, textarea { color: var(--ink); }
+
+@media (max-width: 1180px) {
+  .shell, html[data-panel="closed"] .shell { grid-template-columns: 190px minmax(0, 1fr); }
+  .appearance {
+    position: fixed; right: 12px; top: 64px; z-index: 45; width: 230px; padding: 14px 16px;
+    background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow);
+  }
+  html[data-panel="open"] .appearance { display: none; }
+  html[data-panel="pop"] .appearance { display: block; }
+  html[data-panel="open"] .head-btn.ap-toggle { display: inline-block; }
+}
+@media (max-width: 860px) {
+  .shell, html[data-panel="closed"] .shell { grid-template-columns: minmax(0, 1fr); }
+  .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .tile { padding: 8px; }
+  .tile b { font-size: 1.3rem; }
+  .side-recent-box { display: none; }
+  .doc-tabs { flex-wrap: wrap; }
+  .doc-tabs .first-tool { margin-left: 0; }
+  .kbd { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prose :target { animation: none; }
+}
+@media print {
+  .site-head, .side, .appearance, .doc-tabs, .verify .btn, .to-top, .progress, footer, .catbar button { display: none !important; }
+  .shell { display: block; padding: 0; }
+  body { background: #fff; }
+  .doc { border: 0; box-shadow: none; padding: 0; }
+}
 </style>
 </head>
 <body>
@@ -662,12 +849,15 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">C</span><span class="brand-name">CRAFT 분석 위키</span></a>
     <form class="head-search" id="wiki-search" role="search">
       <label class="sr-only" for="wiki-q">분석글 검색</label>
-      <input type="search" id="wiki-q" placeholder="논문 제목, 교수 이름, 주제 검색" autocomplete="off">
+      <input type="search" id="wiki-q" placeholder="논문 제목, 교수 이름, 주제 검색" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest" aria-autocomplete="list">
+      <div class="suggest" id="suggest" role="listbox" hidden></div>
       <button type="submit">검색</button>
     </form>
+    <button class="head-btn ap-toggle" type="button" id="ap-open" aria-controls="appearance">외관</button>
     <div class="account" id="account" hidden></div>
   </div>
 </header>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
 <div class="shell">
 <nav class="side" aria-label="사이트 메뉴">
@@ -692,6 +882,10 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
       <li><a href="#/about" data-nav="about">프로젝트 소개</a></li>
     </ul>
   </div>
+  <div class="side-recent-box" id="recent-box" hidden>
+    <h2>최근 본 문서</h2>
+    <ul class="side-recent" id="recent-list"></ul>
+  </div>
 </nav>
 
 <main id="main">
@@ -705,8 +899,14 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
         <p>논문과 책을 네 단계로 분석한 글을 찾아 읽고, 직접 올리고, 함께 고칩니다.</p>
       </div>
       <a class="btn" href="#/new">분석글 쓰기</a>
+      <div class="tiles" id="tiles">
+        <div class="tile"><b data-count="articles">–</b><span>분석글</span></div>
+        <div class="tile"><b data-count="measured">–</b><span>측정 첨부</span></div>
+        <div class="tile"><b data-count="editors">–</b><span>참여한 사람</span></div>
+      </div>
       <p class="wiki-stats" id="wiki-stats"></p>
     </div>
+    <section class="featured" id="featured" aria-labelledby="featured-title" hidden></section>
     <div class="front-grid" id="front-grid">
       <section aria-label="분석글 목록">
         <div class="wiki-bar">
@@ -906,7 +1106,29 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
 </div>
 
 </main>
+
+<aside class="appearance" id="appearance" aria-label="외관 설정">
+  <div class="ap-head"><h2>외관</h2><button type="button" id="ap-hide">숨기기</button></div>
+  <fieldset>
+    <legend>글</legend>
+    <label><input type="radio" name="ap-size" value="s"> 작음</label>
+    <label><input type="radio" name="ap-size" value="m"> 표준</label>
+    <label><input type="radio" name="ap-size" value="l"> 큼</label>
+  </fieldset>
+  <fieldset>
+    <legend>너비</legend>
+    <label><input type="radio" name="ap-width" value="normal"> 표준</label>
+    <label><input type="radio" name="ap-width" value="wide"> 넓게</label>
+  </fieldset>
+  <fieldset>
+    <legend>색</legend>
+    <label><input type="radio" name="ap-theme" value="auto"> 자동</label>
+    <label><input type="radio" name="ap-theme" value="light"> 라이트</label>
+    <label><input type="radio" name="ap-theme" value="dark"> 다크</label>
+  </fieldset>
+</aside>
 </div>
+<button class="to-top" type="button" id="to-top" aria-label="맨 위로">↑</button>
 
 <footer>
   <div class="wrap">
@@ -1747,7 +1969,7 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     box.hidden = false;
     if (CLOUD.user) {
       var name = (CLOUD.user.user_metadata && CLOUD.user.user_metadata.user_name) || '회원';
-      box.innerHTML = '<span class="account-name">' + esc(name) + '</span><button type="button" id="auth-out">로그아웃</button>';
+      box.innerHTML = avatar(name) + '<span class="account-name">' + esc(name) + '</span><button type="button" id="auth-out">로그아웃</button>';
     } else {
       box.innerHTML = '<button type="button" id="auth-open">로그인</button>';
     }
@@ -1895,8 +2117,13 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
       loadList(true);
       loadStats();
       loadCats();
+      if (!WIKI.all) loadFeatured();
     }
+    if (page !== 'article') document.title = 'CRAFT 분석 위키';
     if (WIKI.lastKey !== key) window.scrollTo(0, 0);
+    hideSuggest();
+    if (document.documentElement.dataset.panel === 'pop') setPanel('open');
+    onScroll();
     WIKI.lastKey = key;
   }
   window.addEventListener('hashchange', route);
@@ -1920,6 +2147,22 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     return [a.authors, a.paper_title, a.publication, a.year].filter(Boolean).join(', ');
   }
   function dateText(v) { return new Date(v).toLocaleDateString('ko-KR'); }
+  function relTime(v) {
+    var sec = (Date.now() - new Date(v).getTime()) / 1000;
+    if (sec < 60) return '방금 전';
+    if (sec < 3600) return Math.floor(sec / 60) + '분 전';
+    if (sec < 86400) return Math.floor(sec / 3600) + '시간 전';
+    if (sec < 86400 * 7) return Math.floor(sec / 86400) + '일 전';
+    return dateText(v);
+  }
+  var AV_COLORS = ['#2F6FD0', '#23926A', '#8A4FC7', '#D9822B', '#C2416B', '#1D8A9C', '#6B7A2E'];
+  function avatar(name) {
+    name = (name || '?').trim() || '?';
+    var h = 0;
+    for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return '<span class="avatar" aria-hidden="true" style="background:' + AV_COLORS[h % AV_COLORS.length] + '">' + esc(name.slice(0, 1)) + '</span>';
+  }
+  function tcls(t) { return 't-' + String(t || '기타').split(' ')[0]; }
   function needConfig(host) {
     host.innerHTML = '<div class="notice">위키를 쓰려면 사이트 코드의 CONFIG에 Supabase 주소와 공개용 키를 넣어야 합니다.</div>';
   }
@@ -1936,7 +2179,7 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
   }
 
   /* 목록과 검색 */
-  var LIST_COLS = 'id, title, paper_title, authors, year, publication, doc_type, field, tags, summary, version, updated_at';
+  var LIST_COLS = 'id, title, paper_title, authors, year, publication, doc_type, field, tags, summary, version, updated_at, editor:profiles!wiki_articles_updated_by_fkey(user_name)';
   async function loadList(reset) {
     var box = $('wiki-results');
     if (!CLOUD.sb) { needConfig(box); return; }
@@ -1947,6 +2190,7 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
       $('list-title').textContent = WIKI.q ? '“' + WIKI.q + '” 검색 결과' : (WIKI.all ? '모든 분석글' : '대문');
       $('list-heading').textContent = WIKI.q ? '찾은 분석글' : (WIKI.all ? '제목 가나다순' : '최근 바뀐 분석글');
       $('front-intro').hidden = !plain;
+      $('featured').hidden = !plain || !$('featured').innerHTML;
       $('front-side').hidden = !plain;
       $('front-grid').classList.toggle('solo', !plain);
     }
@@ -1966,13 +2210,15 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     if (res.error) { box.textContent = cloudError(res.error); return; }
     var html = index ? res.data.map(function (a) {
       return '<tr><td><a href="#/article/' + esc(a.id) + '">' + esc(a.title) + '</a></td><td>' + esc(a.authors) +
-        '</td><td>' + esc(a.field || a.doc_type) + '</td><td>' + badges(a) + '</td><td>' + dateText(a.updated_at) + '</td></tr>';
+        '</td><td><span class="dot ' + tcls(a.doc_type) + '" style="display:inline-block;margin-right:6px"></span>' + esc(a.field || a.doc_type) + '</td><td>' + badges(a) + '</td><td>' + esc(relTime(a.updated_at)) + '</td></tr>';
     }).join('') : res.data.map(function (a) {
-      return '<article class="result"><h2><a href="#/article/' + esc(a.id) + '">' + esc(a.title) + '</a></h2>' +
+      var who = a.editor && a.editor.user_name;
+      return '<article class="result ' + tcls(a.doc_type) + '"><h2><a href="#/article/' + esc(a.id) + '">' + esc(a.title) + '</a></h2>' +
         (sourceLine(a) ? '<p class="src">' + esc(sourceLine(a)) + '</p>' : '') +
         (a.summary ? '<p class="sum">' + esc(a.summary) + '</p>' : '') +
-        '<div class="marks"><span class="badge type">' + esc(a.doc_type) + '</span>' + badges(a) +
-        (a.tags ? '<span class="tag">' + esc(a.tags) + '</span>' : '') + '</div></article>';
+        '<div class="marks"><span class="badge type ' + tcls(a.doc_type) + '">' + esc(a.doc_type) + '</span>' + badges(a) +
+        (a.tags ? '<span class="tag">' + esc(a.tags) + '</span>' : '') + '</div>' +
+        '<p class="who">' + avatar(who) + esc(who || '') + (who ? ' 님이 ' : '') + esc(relTime(a.updated_at)) + ' 수정 · ' + a.version + '판</p></article>';
     }).join('');
     if (index && html) {
       if (reset) box.innerHTML = '<table class="index-table"><thead><tr><th scope="col">제목</th><th scope="col">저자</th><th scope="col">분야</th><th scope="col">검증</th><th scope="col">수정일</th></tr></thead><tbody id="index-body"></tbody></table>';
@@ -1990,8 +2236,38 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     var res = await CLOUD.sb.rpc('wiki_stats');
     var r = res.data && res.data[0], el = $('wiki-stats');
     if (res.error || !r) { el.textContent = ''; return; }
-    el.textContent = '분석글 ' + r.articles + '편, 측정 첨부 ' + r.measured + '편' +
-      (r.avg_pre !== null ? ', 평균 밀도 ' + Number(r.avg_pre).toFixed(2) + ' → ' + Number(r.avg_post).toFixed(2) + ' (' + r.participants + '명)' : '');
+    el.textContent = r.avg_pre !== null ? '측정을 첨부한 ' + r.participants + '명의 평균 구조화 밀도는 ' + Number(r.avg_pre).toFixed(2) + ' → ' + Number(r.avg_post).toFixed(2) + '입니다.' : '';
+    countUp('articles', +r.articles);
+    countUp('measured', +r.measured);
+    var ed = await CLOUD.sb.from('wiki_revisions').select('edited_by').limit(1000);
+    if (!ed.error) countUp('editors', new Set(ed.data.map(function (x) { return x.edited_by; })).size);
+  }
+  function countUp(key, target) {
+    var el = document.querySelector('[data-count="' + key + '"]');
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !target) { el.textContent = target; return; }
+    var t0 = performance.now();
+    (function step(t) {
+      var k = Math.min(1, (t - t0) / 700);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  async function loadFeatured() {
+    var box = $('featured');
+    if (!CLOUD.sb) { box.hidden = true; return; }
+    var res = await CLOUD.sb.from('wiki_articles').select('id, title, paper_title, authors, year, publication, doc_type, summary').order('created_at').limit(200);
+    if (res.error || !res.data.length) { box.hidden = true; return; }
+    var day = Math.floor((Date.now() + 9 * 3600000) / 86400000);
+    var a = res.data[day % res.data.length];
+    var colors = { '논문': 'var(--c-paper)', '서적': 'var(--c-book)', '기술 문서': 'var(--c-tech)' };
+    box.innerHTML = '<div class="featured-in"><div class="featured-band" style="background:' + (colors[a.doc_type] || 'var(--c-etc)') + '"></div>' +
+      '<div class="featured-body"><h2 class="box-title" id="featured-title" style="display:inline-block;border:0;padding:0;background:none;color:var(--soft);font:500 .88rem/1.5 var(--sans)">오늘의 분석글</h2>' +
+      '<h3><a href="#/article/' + esc(a.id) + '">' + esc(a.title) + '</a></h3>' +
+      (sourceLine(a) ? '<p class="src">' + esc(sourceLine(a)) + '</p>' : '') +
+      (a.summary ? '<p class="sum">' + esc(a.summary) + '</p>' : '') +
+      '<a class="more-link" href="#/article/' + esc(a.id) + '">읽으러 가기</a></div></div>';
+    box.hidden = false;
   }
   var searchTimer;
   function onList() { return !$('view-wiki').hidden; }
@@ -2027,7 +2303,7 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     var box = $('cat-list');
     if (res.error) { box.textContent = ''; return; }
     var count = {};
-    res.data.forEach(function (r) { count[r.field] = (count[r.field] || 0) + 1; });
+    res.data.forEach(function (r) { var f = (r.field || '').trim(); if (f) count[f] = (count[f] || 0) + 1; });
     var names = Object.keys(count).sort(function (a, b) { return count[b] - count[a]; }).slice(0, 12);
     box.innerHTML = names.length ? names.map(function (n) {
       return '<li><button class="link-plain" type="button" data-cat="' + esc(n) + '">' + esc(n) + '</button> (' + count[n] + ')</li>';
@@ -2077,6 +2353,9 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     return '<div class="doc-tabs"><a class="on" href="#/article/' + esc(a.id) + '" aria-current="page">문서</a>' +
       '<a href="#/edit/' + esc(a.id) + '">수정</a>' +
       '<button type="button" data-a="history">수정 기록</button>' +
+      '<button class="tool first-tool" type="button" data-a="link">링크 복사</button>' +
+      '<button class="tool" type="button" data-a="cite">인용</button>' +
+      '<button class="tool" type="button" data-a="print">인쇄</button>' +
       (own ? '<button class="del" type="button" data-a="delete">삭제</button>' : '') + '</div>' +
       '<article class="doc"><h1>' + esc(a.title) + '</h1>' +
       '<p class="doc-sub">최종 수정 ' + dateText(a.updated_at) + ', ' + esc((a.editor && a.editor.user_name) || '') + ' (' + a.version + '판)</p>' +
@@ -2119,12 +2398,23 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
     WIKI.article = res.data;
     host.innerHTML = articleHtml(res.data);
     buildToc();
+    remember(res.data);
+    document.title = res.data.title + ' - CRAFT 분석 위키';
   }
   $('article-host').addEventListener('click', async function (e) {
     var sec = e.target.closest('[data-sec]');
     if (sec) { e.preventDefault(); $(sec.dataset.sec).scrollIntoView(); return; }
     var b = e.target.closest('[data-a]'), a = WIKI.article, res;
     if (!b || !a) return;
+    if (b.dataset.a === 'link') { copyText(location.href.split('#')[0] + '#/article/' + a.id, '문서 링크를 복사했습니다.'); return; }
+    if (b.dataset.a === 'print') { window.print(); return; }
+    if (b.dataset.a === 'cite') {
+      var who = (a.author && a.author.user_name) || '작성자';
+      var cite = who + ' (' + new Date(a.updated_at).getFullYear() + '). ' + a.title + '. CRAFT 분석 위키, ' + a.version + '판. ' +
+        location.href.split('#')[0] + '#/article/' + a.id + ' (' + new Date().toLocaleDateString('ko-KR') + ' 열람)';
+      copyText(cite, '인용 문구를 복사했습니다.');
+      return;
+    }
     if (b.dataset.a === 'history') openHistory(a.id);
     if (b.dataset.a === 'delete') {
       if (!window.confirm('이 분석글과 수정 기록을 모두 삭제할까요? 되돌릴 수 없습니다.')) return;
@@ -2158,10 +2448,46 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
       var who = r.profiles && r.profiles.user_name;
       return '<div class="note-row"><span>' + r.version + '판 ' + esc(r.edit_note || (r.version === 1 ? '처음 작성' : '')) +
         '<span class="meta">' + esc(who || '') + ', ' + esc(new Date(r.created_at).toLocaleString('ko-KR')) + '</span></span>' +
-        (i ? '<span class="acts"><button class="btn small line" type="button" data-rev="' + i + '">이 판에서 수정</button></span>' : '') + '</div>';
-    }).join('');
+        '<span class="acts">' + (i < HISTORY.length - 1 ? '<button class="btn small line" type="button" data-diff="' + i + '">이전 판과 비교</button>' : '') +
+        (i ? '<button class="btn small line" type="button" data-rev="' + i + '">이 판에서 수정</button>' : '') + '</span></div>';
+    }).join('') + '<div id="diff-slot"></div>';
+  }
+  function lineDiff(a, b) {
+    a = a.split('\n'); b = b.split('\n');
+    var n = a.length, m = b.length;
+    if (n * m > 400000) return [['same', '글이 너무 길어 비교할 수 없습니다.']];
+    var L = [];
+    for (var i = 0; i <= n; i++) { L.push(new Array(m + 1).fill(0)); }
+    for (i = n - 1; i >= 0; i--) for (var j = m - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    var out = []; i = 0; j = 0;
+    while (i < n && j < m) {
+      if (a[i] === b[j]) { out.push(['same', a[i]]); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) out.push(['del', a[i++]]);
+      else out.push(['add', b[j++]]);
+    }
+    while (i < n) out.push(['del', a[i++]]);
+    while (j < m) out.push(['add', b[j++]]);
+    return out;
+  }
+  function revText(r) {
+    return ['제목: ' + r.title, '원문: ' + (r.paper_title || ''), '저자: ' + (r.authors || ''), '요약: ' + (r.summary || ''), ''].join('\n') + r.body;
+  }
+  function showDiff(i) {
+    var newer = HISTORY[i], older = HISTORY[i + 1];
+    var rows = lineDiff(revText(older), revText(newer)), html = '', changed = 0;
+    rows.forEach(function (r, k) {
+      var near = rows.slice(Math.max(0, k - 2), k + 3).some(function (x) { return x[0] !== 'same'; });
+      if (r[0] !== 'same') changed++;
+      if (r[0] === 'same' && !near) { if (!html.endsWith('<div class="gap">…</div>')) html += '<div class="gap">…</div>'; return; }
+      html += '<div class="' + r[0] + '">' + (esc(r[1]) || ' ') + '</div>';
+    });
+    $('diff-slot').innerHTML = '<h4 class="subhead" style="margin-top:16px">' + older.version + '판 → ' + newer.version + '판에서 바뀐 부분</h4>' +
+      (changed ? '<div class="diff">' + html + '</div>' : '<p class="hint">내용 변화가 없습니다.</p>');
+    $('diff-slot').scrollIntoView({ block: 'nearest' });
   }
   $('history-list').addEventListener('click', function (e) {
+    var d = e.target.closest('[data-diff]');
+    if (d) { showDiff(+d.dataset.diff); return; }
     var b = e.target.closest('[data-rev]');
     if (!b) return;
     WIKI.restore = HISTORY[+b.dataset.rev];
@@ -2446,6 +2772,123 @@ footer .wrap { max-width: 1320px; margin: 0 auto; padding: 14px 20px 0; }
       }, 0);
     });
   }
+
+  /* 외관 설정 */
+  var AP_KEY = 'craft-appearance';
+  function apRead() { try { return JSON.parse(localStorage.getItem(AP_KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function apWrite(k, v) {
+    var p = apRead();
+    p[k] = v;
+    try { localStorage.setItem(AP_KEY, JSON.stringify(p)); } catch (e) { /* 저장 불가 환경 */ }
+  }
+  var root = document.documentElement;
+  [['size', 'ap-size'], ['width', 'ap-width'], ['theme', 'ap-theme']].forEach(function (pair) {
+    document.querySelectorAll('input[name="' + pair[1] + '"]').forEach(function (r) {
+      r.checked = r.value === root.dataset[pair[0]];
+      r.addEventListener('change', function () { root.dataset[pair[0]] = r.value; apWrite(pair[0], r.value); });
+    });
+  });
+  function narrow() { return window.matchMedia('(max-width: 1180px)').matches; }
+  function setPanel(v) {
+    root.dataset.panel = v;
+    if (v !== 'pop') apWrite('panel', v);
+  }
+  $('ap-hide').addEventListener('click', function () { setPanel(narrow() ? 'open' : 'closed'); $('ap-open').focus(); });
+  $('ap-open').addEventListener('click', function () {
+    if (narrow()) setPanel(root.dataset.panel === 'pop' ? 'open' : 'pop');
+    else setPanel('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (root.dataset.panel === 'pop' && !e.target.closest('#appearance, #ap-open')) setPanel('open');
+  });
+  /* 넓은 화면에서 숨겨 둔 경우 버튼이 보이도록 */
+  var apStyle = document.createElement('style');
+  apStyle.textContent = 'html[data-panel="closed"] .head-btn.ap-toggle { display: inline-block; }';
+  document.head.appendChild(apStyle);
+
+  /* 최근 본 문서 */
+  var RECENT_KEY = 'craft-recent';
+  function recentRead() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]') || []; } catch (e) { return []; } }
+  function renderRecent() {
+    var list = recentRead();
+    $('recent-box').hidden = !list.length;
+    $('recent-list').innerHTML = list.map(function (r) {
+      return '<li><a href="#/article/' + esc(r.id) + '" title="' + esc(r.title) + '">' + esc(r.title) + '</a></li>';
+    }).join('');
+  }
+  function remember(a) {
+    var list = recentRead().filter(function (r) { return r.id !== a.id; });
+    list.unshift({ id: a.id, title: a.title });
+    try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 6))); } catch (e) { /* 저장 불가 환경 */ }
+    renderRecent();
+  }
+  renderRecent();
+
+  /* 검색어 제안 */
+  var sugTimer, sugToken = 0, sugIndex = -1;
+  function hideSuggest() {
+    $('suggest').hidden = true;
+    $('wiki-q').setAttribute('aria-expanded', 'false');
+    sugIndex = -1;
+  }
+  async function suggest(q) {
+    if (!CLOUD.sb || q.length < 1) { hideSuggest(); return; }
+    var token = ++sugToken, pat = '%' + q.replace(/[\\%_*,()]/g, ' ') + '%';
+    var res = await CLOUD.sb.from('wiki_articles').select('id, title, authors, paper_title, doc_type')
+      .or('title.ilike.' + pat + ',authors.ilike.' + pat + ',paper_title.ilike.' + pat + ',tags.ilike.' + pat)
+      .order('updated_at', { ascending: false }).limit(6);
+    if (token !== sugToken || $('wiki-q').value.trim() !== q) return;
+    var box = $('suggest');
+    if (res.error || !res.data.length) { hideSuggest(); return; }
+    box.innerHTML = res.data.map(function (a, i) {
+      return '<a href="#/article/' + esc(a.id) + '" role="option" id="sug-' + i + '"><span class="dot ' + tcls(a.doc_type) + '"></span>' +
+        '<span class="t">' + esc(a.title) + '</span><span class="m">' + esc([a.authors, a.paper_title].filter(Boolean).join(', ') || a.doc_type) + '</span></a>';
+    }).join('') + '<button class="link-plain all" type="button" id="sug-all">“' + esc(q) + '” 전체 검색 결과 보기</button>';
+    box.hidden = false;
+    $('wiki-q').setAttribute('aria-expanded', 'true');
+    sugIndex = -1;
+  }
+  $('wiki-q').addEventListener('input', function (e) {
+    clearTimeout(sugTimer);
+    var q = e.target.value.trim();
+    sugTimer = setTimeout(function () { suggest(q); }, 180);
+  });
+  $('wiki-q').addEventListener('keydown', function (e) {
+    var items = $('suggest').hidden ? [] : $('suggest').querySelectorAll('a');
+    if (e.key === 'Escape') { hideSuggest(); return; }
+    if (!items.length || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter')) return;
+    if (e.key === 'Enter') {
+      if (sugIndex > -1) { e.preventDefault(); location.hash = items[sugIndex].getAttribute('href'); hideSuggest(); }
+      else hideSuggest();
+      return;
+    }
+    e.preventDefault();
+    sugIndex = (sugIndex + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+    items.forEach(function (a, i) { a.classList.toggle('on', i === sugIndex); });
+    e.target.setAttribute('aria-activedescendant', items[sugIndex].id);
+  });
+  $('suggest').addEventListener('click', function (e) {
+    if (e.target.id === 'sug-all') { runSearch($('wiki-q').value); hideSuggest(); return; }
+    if (e.target.closest('a')) hideSuggest();
+  });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.head-search')) hideSuggest(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '') && !document.querySelector('dialog[open]')) {
+      e.preventDefault();
+      $('wiki-q').focus();
+    }
+  });
+  $('wiki-q').placeholder = '논문 제목, 교수 이름, 주제 검색 ( / 키로 바로 검색)';
+
+  /* 읽기 진행 막대와 맨 위로 버튼 */
+  function onScroll() {
+    var y = window.scrollY, onDoc = !$('view-article').hidden;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    $('progress').style.width = onDoc && max > 0 ? Math.min(100, y / max * 100) + '%' : '0';
+    $('to-top').classList.toggle('on', y > 600);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  $('to-top').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   /* 시작 */
   initCloud();
